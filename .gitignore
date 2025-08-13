@@ -1,0 +1,14 @@
+# Visual Studio Ordner
+.vs/
+
+# BlazorTemplate Build-Ordner
+BlazorTemplate/bin/
+BlazorTemplate/obj/Debug/
+
+# BLDAL Build-Ordner und Migrationen
+BLDAL/bin/
+BLDAL/obj/Debug/
+
+# DB_Models Build-Ordner
+DB_Models/bin/
+DB_Models/obj/Debug/

@@ -1,0 +1,36 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorTemplate", "BlazorTemplate\BlazorTemplate.csproj", "{B1AB4234-87E0-A573-6DE9-862CB19B7D71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLDAL", "BLDAL\BLDAL.csproj", "{E9A3D98F-9A15-D508-939C-73192B764420}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DB_Models", "DB_Models\DB_Models.csproj", "{6547ECF8-66CA-C75E-DED1-5003289E8006}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1AB4234-87E0-A573-6DE9-862CB19B7D71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1AB4234-87E0-A573-6DE9-862CB19B7D71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1AB4234-87E0-A573-6DE9-862CB19B7D71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1AB4234-87E0-A573-6DE9-862CB19B7D71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9A3D98F-9A15-D508-939C-73192B764420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9A3D98F-9A15-D508-939C-73192B764420}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9A3D98F-9A15-D508-939C-73192B764420}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9A3D98F-9A15-D508-939C-73192B764420}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6547ECF8-66CA-C75E-DED1-5003289E8006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6547ECF8-66CA-C75E-DED1-5003289E8006}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6547ECF8-66CA-C75E-DED1-5003289E8006}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6547ECF8-66CA-C75E-DED1-5003289E8006}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3223CEAD-DAD6-4067-8C2E-D613E9C46576}
+	EndGlobalSection
+EndGlobal
