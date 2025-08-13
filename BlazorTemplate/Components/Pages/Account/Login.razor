@@ -5,7 +5,7 @@
 @using Microsoft.AspNetCore.Authentication.Cookies
 @inject NavigationManager NavigationManager;
 @inject BLDAL.UnitOfWork uow;
-<h3>Login</h3>
+@* <h3>Login</h3> *@
 
 <div class="row">
     <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
@@ -18,13 +18,13 @@
             </div>
 
             <div class="mb-3">
-                <label>User Name</label>
+                @* <label>User Name</label> *@
                 <InputText @bind-Value="LoginVM.UserName" class="form-control" placeholder="Username" />
                 <ValidationMessage For="() => LoginVM.UserName" />
             </div>
 
             <div class="mb-3">
-                <label>Password</label>
+                @* <label>Password</label> *@
                 <InputText @bind-Value="LoginVM.Password" placeholder="Password" type="password" class="form-control" />
                 <ValidationMessage For="() => LoginVM.Password" />
             </div>
@@ -42,6 +42,27 @@
         </div>
     </div>
 </div>
+
+<style>
+    .form-control {
+    text-align: center;
+}
+
+.form-control::placeholder {
+    text-align: center;
+}
+
+/* Browser-Kompatibilität */
+.form-control::-webkit-input-placeholder {
+    text-align: center;
+}
+.form-control:-moz-placeholder {
+    text-align: center;
+}
+.form-control:-ms-input-placeholder {
+    text-align: center;
+}
+</style>
 
 
 @code {
