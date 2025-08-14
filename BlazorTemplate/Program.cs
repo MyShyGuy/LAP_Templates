@@ -23,6 +23,7 @@ builder.Services.AddDbContext<AppDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDatabase"))
 );
 
+
 builder.Services.AddAuthentication();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddDbContext<AppDBContext>();

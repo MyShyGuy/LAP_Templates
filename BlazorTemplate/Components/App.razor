@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject IJSRuntime JS
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -20,3 +21,18 @@
 </body>
 
 </html>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("import", "/js/tenor.js");
+            await JS.InvokeVoidAsync("loadTenorEmbed");
+        }
+        else
+        {
+            await JS.InvokeVoidAsync("renderTenorEmbeds");
+        }
+    }
+}
