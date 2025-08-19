@@ -12,3 +12,5 @@ BLDAL/obj/Debug/
 # DB_Models Build-Ordner
 DB_Models/bin/
 DB_Models/obj/Debug/
+
+test.csv
