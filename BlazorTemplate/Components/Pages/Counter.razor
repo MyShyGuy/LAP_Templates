@@ -2,6 +2,8 @@
 @*einbindung von parametern die man über die URL weitergeben kann an die Komponente WICHTIG: wird immer als String angesehen*@
 @* CurrentCount? das ? macht das der Parameter Optional ist*@
 @* Die Paramter können auch als HTML attribut angesprochen werden *@
+@* damit mann den Parameter nicht parsen muss kann man auch direct einen RouteConstraint machen
+    z.B: @page "/counter/{CurrentCount:int?}" *@
 @rendermode InteractiveServer
 @attribute [Authorize(Roles = "Admin, User, Guest")]
 
@@ -43,7 +45,7 @@
     }
 }
 
-@* z.B: 
+@* als komponente verwenden z.B: 
 
 @{
     var amount = 2;

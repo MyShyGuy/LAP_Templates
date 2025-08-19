@@ -4,6 +4,7 @@
 # BlazorTemplate Build-Ordner
 BlazorTemplate/bin/
 BlazorTemplate/obj/Debug/
+BlazorTemplate/appsettings.json
 
 # BLDAL Build-Ordner und Migrationen
 BLDAL/bin/
