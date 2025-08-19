@@ -3,6 +3,8 @@
 @using System.Security.Claims;
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.Extensions.Logging
+@inject ILogger<Login> USRlogger;
 @inject NavigationManager NavigationManager;
 @inject BLDAL.UnitOfWork uow;
 @* <h3>Login</h3> *@
@@ -76,6 +78,7 @@
 
     private async Task Authenticate()
     {
+        try {
         var userAccount = uow.Userrepo.UserLogin(LoginVM);
         if(userAccount == null)
         {
@@ -92,6 +95,13 @@
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var principal = new ClaimsPrincipal(identity);
         await HttpContext.SignInAsync(principal);
+        USRlogger.LogInformation($"User Logged in: {principal.Identity.Name} at {DateTime.UtcNow.ToString()}");
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.";
+            USRlogger.LogError(ex, "Authentifizierungsfehler");
+        }
         NavigationManager.NavigateTo("/");
     }
 }

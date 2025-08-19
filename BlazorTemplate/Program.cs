@@ -5,6 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddLogging(logging =>
+{
+    logging.ClearProviders(); // alte Provider entfernen
+    logging.AddConsole();     // Konsole
+    logging.AddDebug();       // Visual Studio Debug
+    logging.SetMinimumLevel(LogLevel.Information); // Level
+});
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
@@ -23,10 +31,7 @@ builder.Services.AddDbContext<AppDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDatabase"))
 );
 
-
-builder.Services.AddAuthentication();
 builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddDbContext<AppDBContext>();
 builder.Services.AddScoped<BLDAL.UnitOfWork>();
 
 var app = builder.Build();
