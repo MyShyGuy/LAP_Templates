@@ -25,6 +25,16 @@
             </Authorized>
         </AuthorizeView>
 
+        <AuthorizeView Roles="Admin, User">
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="csv-upload">
+                        <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> CSV
+                    </NavLink>
+                </div>
+            </Authorized>
+        </AuthorizeView>
+
         <AuthorizeView Roles="Admin">
             <Authorized>
                 <div class="nav-item px-3">

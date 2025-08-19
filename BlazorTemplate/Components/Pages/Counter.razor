@@ -1,4 +1,7 @@
-﻿@page "/counter"
+﻿@page "/counter/{CurrentCount?}" 
+@*einbindung von parametern die man über die URL weitergeben kann an die Komponente WICHTIG: wird immer als String angesehen*@
+@* CurrentCount? das ? macht das der Parameter Optional ist*@
+@* Die Paramter können auch als HTML attribut angesprochen werden *@
 @rendermode InteractiveServer
 @attribute [Authorize(Roles = "Admin, User, Guest")]
 
@@ -10,11 +13,43 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+@if(increment > 1){
+    <ul>
+        @for(int i = 0; i < currentCount; i++)
+        {
+            <li>Clicked!</li>
+        }
+    </ul>
+}
+
 @code {
+    [Parameter]
+    public string CurrentCount {
+        get{return currentCount.ToString();}
+        set{if(int.TryParse(value,out int number))
+            currentCount = number;
+            else 
+            currentCount = 0;}
+    }
     private int currentCount = 0;
+
+    [Parameter]
+    public int increment {get; set;} = 1;
+
 
     private void IncrementCount()
     {
-        currentCount++;
+       currentCount += increment;
     }
 }
+
+@* z.B: 
+
+@{
+    var amount = 2;
+}
+
+<Counter increment="amount" CurrentCount="420"/>
+
+
+ *@

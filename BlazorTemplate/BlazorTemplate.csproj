@@ -11,4 +11,8 @@
 		<ProjectReference Include="..\DB_Models\DB_Models.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="CsvHelper" Version="33.1.0" />
+	</ItemGroup>
+
 </Project>
