@@ -1,5 +1,6 @@
-@page "/Todo"
+@page "/todo"
 @rendermode InteractiveServer
+@attribute [Authorize(Roles = "Admin, User, Guest")]
 
 <h1> My ToDo List:</h1>
 <ul>
@@ -16,12 +17,13 @@
 
 <input @bind="newtodo">
 <button @onclick="AddTodo">Add todos</button>
+<button @onclick="removeFinishedTodos">remove</button>
 
 
 @code{
 
     public List<TodoItem> todos = new List<TodoItem>();
-        string newtodo;
+    string newtodo;
     public class TodoItem
     {
         public string Title {get; set;}
@@ -30,7 +32,24 @@
     private void AddTodo(MouseEventArgs args)
     {
         if(!string.IsNullOrWhiteSpace(newtodo))
-        todos.Add(new TodoItem{Title = newtodo, IsDone = false});
+            todos.Add(new TodoItem{Title = newtodo, IsDone = false});
         newtodo = "";
     }
+    private async Task removeFinishedTodos(MouseEventArgs args)
+    {
+        var itemsToRemove = new List<TodoItem>();
+        
+        foreach (TodoItem todo in todos)
+        {
+            if(todo.IsDone)
+            {
+                itemsToRemove.Add(todo);
+            }
+        }
+        
+        foreach (var item in itemsToRemove)
+        {
+            todos.Remove(item);
+        }
+    }    
 }
