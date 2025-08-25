@@ -7,7 +7,7 @@
 @inject ILogger<Login> USRlogger;
 @inject NavigationManager NavigationManager;
 @inject BLDAL.UnitOfWork uow;
-@* <h3>Login</h3> *@
+@inject IHttpContextAccessor HttpContextAccessor;  
 
 <div class="row">
     <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
@@ -20,13 +20,11 @@
             </div>
 
             <div class="mb-3">
-                @* <label>User Name</label> *@
                 <InputText @bind-Value="LoginVM.UserName" class="form-control" placeholder="Username" />
                 <ValidationMessage For="() => LoginVM.UserName" />
             </div>
 
             <div class="mb-3">
-                @* <label>Password</label> *@
                 <InputText @bind-Value="LoginVM.Password" placeholder="Password" type="password" class="form-control" />
                 <ValidationMessage For="() => LoginVM.Password" />
             </div>
@@ -66,11 +64,7 @@
 }
 </style>
 
-
 @code {
-    [CascadingParameter]
-    public HttpContext? HttpContext { get; set; }
-
     [SupplyParameterFromForm]
     public LoginDTO LoginVM { get; set; } = new();
 
@@ -78,30 +72,43 @@
 
     private async Task Authenticate()
     {
-        try {
-        var userAccount = uow.Userrepo.UserLogin(LoginVM);
-        if(userAccount == null)
+        try
         {
-            ErrorMessage = "Invalid username or password.";
-            return;
-        }
+            var userAccount = uow.Userrepo.UserLogin(LoginVM);
+            if (userAccount == null)
+            {
+                ErrorMessage = "Invalid username or password.";
+                return;
+            }
 
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, userAccount.UserName),
-            new Claim(ClaimTypes.Role, userAccount.Roles.FirstOrDefault().RoleName)
-        };
+            // 🔹 IP-Adresse holen
+            var ip = HttpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
 
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var principal = new ClaimsPrincipal(identity);
-        await HttpContext.SignInAsync(principal);
-        USRlogger.LogInformation($"User Logged in: {principal.Identity.Name} at {DateTime.UtcNow.ToString()}");
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, userAccount.UserName),
+                new Claim(ClaimTypes.Role, userAccount.Roles.FirstOrDefault().RoleName),
+                new Claim("ip", ip ?? "unknown") // 🔹 IP als Claim hinzufügen
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContextAccessor.HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal
+            );
+
+            USRlogger.LogInformation(
+                $"User Logged in: {principal.Identity?.Name} from {ip} at {DateTime.UtcNow}"
+            );
         }
         catch (Exception ex)
         {
             ErrorMessage = "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.";
             USRlogger.LogError(ex, "Authentifizierungsfehler");
         }
+
         NavigationManager.NavigateTo("/");
     }
 }

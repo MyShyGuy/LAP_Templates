@@ -31,6 +31,10 @@ builder.Services.AddDbContext<AppDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDatabase"))
 );
 
+// Für die abfrage der Client IP über HTTPContext
+builder.Services.AddHttpContextAccessor();
+
+//Auth state weitergabe und einfügen der Unit of work
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<BLDAL.UnitOfWork>();
 

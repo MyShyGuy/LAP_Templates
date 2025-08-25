@@ -2,54 +2,83 @@
 @rendermode InteractiveServer
 @attribute [Authorize(Roles = "Admin, User, Guest")]
 
-<h1> My ToDo List:</h1>
-<ul>
-    @foreach(var todo in todos)
-    {
-        <li>
-            <input type="checkbox" @bind="todo.IsDone">
-            <input @bind="todo.Title">    
-        </li>
-    }
-</ul>
-<h3>Need to Finished: @todos.Count(x => !x.IsDone)</h3>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12 text-center">
+            <h1>My ToDo List:</h1>
 
+            <!-- Header für Grid -->
+            <div class="row fw-bold border-bottom py-2">
+                <div class="col-1">Done</div>
+                <div class="col-3">Titel</div>
+                <div class="col-5">Beschreibung</div>
+                <div class="col-3">Aktion</div>
+            </div>
 
-<input @bind="newtodo">
-<button @onclick="AddTodo">Add todos</button>
-<button @onclick="removeFinishedTodos">remove</button>
+            <!-- Todos im Grid -->
+            @foreach (var todo in todos)
+            {
+                <div class="row align-items-center py-2 border-bottom">
+                    <div class="col-1">
+                        <input type="checkbox" @bind="todo.IsDone" />
+                    </div>
+                    <div class="col-3">
+                        <input class="form-control" @bind="todo.Title" />
+                    </div>
+                    <div class="col-5">
+                        <input class="form-control" @bind="todo.Description" />
+                    </div>
+                    <div class="col-3">
+                        <button class="btn btn-sm btn-danger" @onclick="() => RemoveSingle(todo)">X</button>
+                    </div>
+                </div>
+            }
 
+            <!-- Footer -->
+            <h3 class="mt-3">
+                Need to Finish: @todos.Count(x => !x.IsDone)
+            </h3>
 
-@code{
+            <div class="row g-2 mt-2">
+                <div class="col-8">
+                    <input class="form-control" placeholder="Neues Todo..." @bind="newtodo" />
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-primary w-100" @onclick="AddTodo">Add</button>
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-secondary w-100" @onclick="removeFinishedTodos">Remove Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+@code {
     public List<TodoItem> todos = new List<TodoItem>();
     string newtodo;
+
     public class TodoItem
     {
-        public string Title {get; set;}
-        public bool IsDone {get; set;}
+        public string Title { get; set; }
+        public string? Description { get; set; }
+        public bool IsDone { get; set; }
     }
-    private void AddTodo(MouseEventArgs args)
+
+    private void AddTodo()
     {
-        if(!string.IsNullOrWhiteSpace(newtodo))
-            todos.Add(new TodoItem{Title = newtodo, IsDone = false});
+        if (!string.IsNullOrWhiteSpace(newtodo))
+            todos.Add(new TodoItem { Title = newtodo, IsDone = false });
         newtodo = "";
     }
-    private async Task removeFinishedTodos(MouseEventArgs args)
+
+    private void RemoveSingle(TodoItem todo)
     {
-        var itemsToRemove = new List<TodoItem>();
-        
-        foreach (TodoItem todo in todos)
-        {
-            if(todo.IsDone)
-            {
-                itemsToRemove.Add(todo);
-            }
-        }
-        
-        foreach (var item in itemsToRemove)
-        {
-            todos.Remove(item);
-        }
-    }    
+        todos.Remove(todo);
+    }
+
+    private async Task removeFinishedTodos()
+    {
+        todos.RemoveAll(t => t.IsDone);
+    }
 }
