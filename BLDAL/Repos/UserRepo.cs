@@ -21,6 +21,11 @@ namespace BLDAL.Repos
             PwS = new PasswordService();
         }
 
+        public User? GetUser(string username)
+        {
+            return dbc.Users.Where(x => x.UserName == username).FirstOrDefault();
+        }
+
         public User? RegisterUser(LoginDTO usr)
         {
             bool UserExist = dbc.Users.Where(x => x.UserName == usr.UserName).Any();
@@ -49,7 +54,7 @@ namespace BLDAL.Repos
             }
             else
                 return null;
-            }
+        }
         public User? UserLogin(LoginDTO usr)
         {
             var user = dbc.Users.Include(u => u.Roles).SingleOrDefault(x => x.UserName == usr.UserName);

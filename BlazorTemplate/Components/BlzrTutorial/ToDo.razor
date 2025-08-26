@@ -1,6 +1,12 @@
 @page "/todo"
+@using DB_Models.DTO
+@using System.Security.Claims
+@using DB_Models.Models
 @rendermode InteractiveServer
 @attribute [Authorize(Roles = "Admin, User, Guest")]
+@inject BLDAL.UnitOfWork uow;
+@inject AuthenticationStateProvider AuthStateProvider
+
 
 <div class="container mt-4">
     <div class="row justify-content-center">
@@ -38,41 +44,52 @@
             <h3 class="mt-3">
                 Need to Finish: @todos.Count(x => !x.IsDone)
             </h3>
-
-            <div class="row g-2 mt-2">
-                <div class="col-8">
-                    <input class="form-control" placeholder="Neues Todo..." @bind="newtodo" />
+            <EditForm Model="@newtodo" OnValidSubmit="@AddTodo" FormName="TodoForm">
+                 <DataAnnotationsValidator />
+                <div class="row g-2 mt-2">
+                    <div class="col-8">
+                        <InputText class="form-control" placeholder="Neues Todo..." @bind-Value="newtodo.Title"/>
+                        <ValidationMessage For="() => newtodo.Title"/>
+                    </div>
+                    <div class="col-2">
+                        <button type="submit" class="btn btn-primary w-100">Add</button>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-secondary w-100" @onclick="removeFinishedTodos">Remove Done</button>
+                    </div>
                 </div>
-                <div class="col-2">
-                    <button class="btn btn-primary w-100" @onclick="AddTodo">Add</button>
-                </div>
-                <div class="col-2">
-                    <button class="btn btn-secondary w-100" @onclick="removeFinishedTodos">Remove Done</button>
-                </div>
-            </div>
+            </EditForm>
         </div>
     </div>
 </div>
 
 @code {
-    public List<TodoItem> todos = new List<TodoItem>();
-    string newtodo;
+    private ClaimsPrincipal? user;
+    private User? usr;
 
-    public class TodoItem
+    protected override async Task OnInitializedAsync()
     {
-        public string Title { get; set; }
-        public string? Description { get; set; }
-        public bool IsDone { get; set; }
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        user = authState.User;
+        string userName = user.Identity.Name.ToString();
+        usr = uow.Userrepo.GetUser(userName);
     }
+    
+    public List<TodoDTO> todos = new List<TodoDTO>();
+    public TodoDTO newtodo {get; set;} = new TodoDTO();
 
     private void AddTodo()
     {
-        if (!string.IsNullOrWhiteSpace(newtodo))
-            todos.Add(new TodoItem { Title = newtodo, IsDone = false });
-        newtodo = "";
+        if (!string.IsNullOrWhiteSpace(newtodo.Title))
+        {
+            newtodo.User = usr;
+            newtodo.CreatedAt = DateTime.Now;
+            todos.Add(newtodo);
+        }     
+        newtodo = new TodoDTO();
     }
 
-    private void RemoveSingle(TodoItem todo)
+    private void RemoveSingle(TodoDTO todo)
     {
         todos.Remove(todo);
     }

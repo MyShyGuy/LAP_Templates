@@ -12,5 +12,7 @@ namespace BLDAL.Repos
     {
         User? RegisterUser(LoginDTO usr);
         User? UserLogin(LoginDTO usr);
+
+        User GetUser(string username);
     }
 }
