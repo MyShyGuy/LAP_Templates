@@ -18,7 +18,7 @@ namespace DB_Models.Models
         public DateTime? DueDate { get; set; }     // Fälligkeitsdatum optional
 
         // FK
-        public int UserID { get; set; }
+        public string UserID { get; set; }
         public required User User { get; set; }    // Navigation Property
     }
 }

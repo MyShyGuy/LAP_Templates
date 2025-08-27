@@ -22,6 +22,7 @@ namespace DB_Models.Models
 
 
         public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
+        public virtual ICollection<TodoItem> Todos { get; set; } = new List<TodoItem>();
 
     }
 }

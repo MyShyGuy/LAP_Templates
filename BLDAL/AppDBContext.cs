@@ -6,21 +6,31 @@ namespace BLDAL
 {
     public class AppDBContext : DbContext
     {
-        public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
+        public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) // benötigt für DI normale migration dieses projektes will mit dem constructor nicht funktionieren
         { }
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
+        public virtual DbSet<TodoItem> Todos { get; set; } = null!;
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         // {
         //     if (!optionsBuilder.IsConfigured)
         //     {
-        //         optionsBuilder.UseSqlServer("Server = (localdb)\\MSSQLLocalDB;Database = WatchDogDB;Integrated Security = True;Connect Timeout = 30;Encrypt = False;Trust Server Certificate = True");
+        //         optionsBuilder.UseSqlServer("Server = (localdb)\\MSSQLLocalDB;Database = TemplateDB;Integrated Security = True;Connect Timeout = 30;Encrypt = False;Trust Server Certificate = True");
         //     }
         // } // Jetzt mit DI
 
         // für die migration in eine DB muss im Package Manager Console der Befehl "add-migration InitialDatabaseCreation -Project BLDAL -StartupProject BLDAL" ausgeführt werden
         // und danach der Befehl "update-database -Project BLDAL -StartupProject BLDAL"
         // um die migration zurück zusetzten kann man "Remove-Migration" verwenden
+
+        //man kann die migration auch über vscode mit dem dotnet befehl machen
+        //dotnet tool install --global dotnet-ef
+        //dotnet tool update --global dotnet-ef
+        //dotnet ef migrations add InitialCreate --project MyApp.DAL --startup-project MyApp.Blazor
+        //dotnet ef database update --project BLDAL --startup-project BlazorTemplate
+        //hier muss bedacht werden das dann die migration über DI läuft wärend mein connection string in den appsettings sind.
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
@@ -44,6 +54,15 @@ namespace BLDAL
                           .WithMany()
                           .HasForeignKey("UserID")
                           .OnDelete(DeleteBehavior.Cascade));
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Todos)
+                .WithOne(t => t.User)
+                .HasForeignKey(t => t.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            //hier noch die beziehung zwischen todoitems und user einfügen aka User has many Todoitems
         }
     }
 }
