@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BLDAL.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250827080443_init")]
+    [Migration("20250827093504_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -48,6 +48,26 @@ namespace BLDAL.Migrations
                         .IsUnique();
 
                     b.ToTable("Roles", "usr");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleID = 1,
+                            Notes = "Hat volle Zugriffsrechte",
+                            RoleName = "Admin"
+                        },
+                        new
+                        {
+                            RoleID = 2,
+                            Notes = "Eingeschränkter Zugriff",
+                            RoleName = "Customer"
+                        },
+                        new
+                        {
+                            RoleID = 3,
+                            Notes = "Nur Lese Zugriff",
+                            RoleName = "Guest"
+                        });
                 });
 
             modelBuilder.Entity("DB_Models.Models.TodoItem", b =>

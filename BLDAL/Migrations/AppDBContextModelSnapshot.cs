@@ -45,6 +45,26 @@ namespace BLDAL.Migrations
                         .IsUnique();
 
                     b.ToTable("Roles", "usr");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleID = 1,
+                            Notes = "Hat volle Zugriffsrechte",
+                            RoleName = "Admin"
+                        },
+                        new
+                        {
+                            RoleID = 2,
+                            Notes = "Eingeschränkter Zugriff",
+                            RoleName = "Customer"
+                        },
+                        new
+                        {
+                            RoleID = 3,
+                            Notes = "Nur Lese Zugriff",
+                            RoleName = "Guest"
+                        });
                 });
 
             modelBuilder.Entity("DB_Models.Models.TodoItem", b =>

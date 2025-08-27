@@ -11,7 +11,7 @@ namespace BLDAL.Repos
 {
     public interface ITodoRepo
     {
-        public List<TodoDTO> GetTodoDTOs();
+        public List<TodoDTO> GetTodoDTOs(User usr);
         public void SaveTodos(List<TodoDTO> todos);
         public void deleteTodos(List<TodoDTO> todos);
         public void SaveTodoDesc(List<TodoDTO> todos);

@@ -6,7 +6,7 @@
 @* damit mann den Parameter nicht parsen muss kann man auch direct einen RouteConstraint machen
     z.B: @page "/counter/{CurrentCount:int?}" *@
 @rendermode InteractiveServer
-@attribute [Authorize(Roles = "Admin, User, Guest")]
+@attribute [Authorize(Roles = "Admin, Customer, Guest")]
 
 <PageTitle>Counter</PageTitle>
 

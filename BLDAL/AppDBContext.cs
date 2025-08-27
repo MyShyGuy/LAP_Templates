@@ -61,6 +61,26 @@ namespace BLDAL
                 .HasForeignKey(t => t.UserID)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Role>().HasData(
+                new Role
+                {
+                    RoleID = 1,
+                    RoleName = "Admin",
+                    Notes = "Hat volle Zugriffsrechte"
+                },
+                new Role
+                {
+                    RoleID = 2,
+                    RoleName = "Customer",
+                    Notes = "Eingeschränkter Zugriff"
+                },
+                new Role
+                {
+                    RoleID = 3,
+                    RoleName = "Guest",
+                    Notes = "Nur Lese Zugriff"
+                });
+
 
             //hier noch die beziehung zwischen todoitems und user einfügen aka User has many Todoitems
         }

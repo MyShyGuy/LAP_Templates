@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace BLDAL.Migrations
 {
     /// <inheritdoc />
@@ -95,6 +97,17 @@ namespace BLDAL.Migrations
                         principalTable: "Users",
                         principalColumn: "UserID",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                schema: "usr",
+                table: "Roles",
+                columns: new[] { "RoleID", "Notes", "RoleName" },
+                values: new object[,]
+                {
+                    { 1, "Hat volle Zugriffsrechte", "Admin" },
+                    { 2, "Eingeschränkter Zugriff", "Customer" },
+                    { 3, "Nur Lese Zugriff", "Guest" }
                 });
 
             migrationBuilder.CreateIndex(
