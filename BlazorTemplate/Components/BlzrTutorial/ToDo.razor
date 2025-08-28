@@ -25,7 +25,7 @@
             <!-- Todos im Grid -->
             @foreach (var todo in todos)
             {
-                <div class="row align-items-center py-2 border-bottom">
+                <div class="row align-items-center py-2 border-bottom @(IsOverdue(todo) ? "bg-danger text-white" : "")">
                     <div class="col-1">
                         <input type="checkbox" @bind="todo.IsDone" @bind:event="onchange" @bind:after="() => uow.TodoRepo.SaveTodos(todos)"/>
                     </div>
@@ -36,7 +36,7 @@
                         <input class="form-control" @bind="todo.Description" @bind:event="oninput" @bind:after="() => DebounceSave(todo)" />
                     </div>
                     <div class="col-3">
-                        <input type="date" class="form-control" @bind="todo.DueDate" @bind:event="onchange" @bind:after="() => uow.TodoRepo.SaveTodos(todos)" />
+                        <input type="date" class="form-control" @bind="todo.DueDate" @bind:event="onchange" @bind:after="() => uow.TodoRepo.SaveTodos(todos)" min="@DateTime.Today.ToString("yyyy-MM-dd")" />
                     </div>
                     <div class="col-3">
                         <button class="btn btn-sm btn-danger" @onclick="() => RemoveSingle(todo)">X</button>
@@ -75,13 +75,18 @@
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         user = authState.User;
-        string userName = user.Identity.Name.ToString();
+        string? userName = user.Identity.Name.ToString();
         usr = uow.Userrepo.GetUser(userName);
         todos = uow.TodoRepo.GetTodoDTOs(usr);
     }
     
     public List<TodoDTO> todos = new List<TodoDTO>();
     public TodoDTO newtodo {get; set;} = new TodoDTO();
+
+    private bool IsOverdue(TodoDTO todo)
+    {
+        return todo.DueDate.HasValue && todo.DueDate.Value.Date <= DateTime.Today && !todo.IsDone;
+    }
 
     private void AddTodo()
     {
@@ -108,33 +113,33 @@
     }
 
     // Dictionary um pro Todo einen Timer zu verwalten
-private Dictionary<TodoDTO, System.Threading.Timer> debounceTimers 
-    = new Dictionary<TodoDTO, System.Threading.Timer>();
+    private Dictionary<TodoDTO, System.Threading.Timer> debounceTimers 
+        = new Dictionary<TodoDTO, System.Threading.Timer>();
 
-private void DebounceSave(TodoDTO todo)
-{
-    // Wenn schon ein Timer läuft → stoppen
-    if (debounceTimers.TryGetValue(todo, out var existingTimer))
+    private void DebounceSave(TodoDTO todo)
     {
-        existingTimer.Dispose();
+        // Wenn schon ein Timer läuft → stoppen
+        if (debounceTimers.TryGetValue(todo, out var existingTimer))
+        {
+            existingTimer.Dispose();
+        }
+
+        // neuen Timer starten (10 Sekunden)
+        var timer = new System.Threading.Timer(_ =>
+        {
+            InvokeAsync(() =>
+            {
+                uow.TodoRepo.SaveTodos(todos);
+                debounceTimers.Remove(todo);
+            });
+        }, null, 10_000, Timeout.Infinite);
+
+        debounceTimers[todo] = timer;
     }
 
-    // neuen Timer starten (10 Sekunden)
-    var timer = new System.Threading.Timer(_ =>
+    private void SaveSingle(List<TodoDTO> todos)
     {
-        InvokeAsync(() =>
-        {
-            uow.TodoRepo.SaveTodos(todos);
-            debounceTimers.Remove(todo);
-        });
-    }, null, 10_000, Timeout.Infinite);
-
-    debounceTimers[todo] = timer;
-}
-
-private void SaveSingle(List<TodoDTO> todos)
-{
-    uow.TodoRepo.SaveTodos(todos);
-}
+        uow.TodoRepo.SaveTodos(todos);
+    }
 
 }
