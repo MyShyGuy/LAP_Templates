@@ -15,30 +15,31 @@
 
             <!-- Header für Grid -->
             <div class="row fw-bold border-bottom py-2">
-                <div class="col-1">Done</div>
-                <div class="col-2">Titel</div>
-                <div class="col-3">Beschreibung</div>
-                <div class="col-3">Fälligkeitsdatum</div>
-                <div class="col-3">Aktion</div>
+                <div class="col-2 col-sm-1">Done</div>
+                <div class="col-6 col-sm-2">Titel</div>
+                <div class="d-none d-sm-block col-sm-3">Beschreibung</div>
+                <div class="d-none d-md-block col-md-3">Fälligkeitsdatum</div>
+                <div class="col-4 col-sm-3">Aktion</div>
             </div>
+
 
             <!-- Todos im Grid -->
             @foreach (var todo in todos)
             {
                 <div class="row align-items-center py-2 border-bottom @(IsOverdue(todo) ? "bg-danger text-white" : "")">
-                    <div class="col-1">
+                    <div class="col-2 col-sm-1">
                         <input type="checkbox" @bind="todo.IsDone" @bind:event="onchange" @bind:after="() => uow.TodoRepo.SaveTodos(todos)"/>
                     </div>
-                    <div class="col-2">
+                    <div class="col-6 col-sm-2">
                         <input class="form-control" @bind="todo.Title" @onblur="() => uow.TodoRepo.SaveTodos(todos)"/>
                     </div>
-                    <div class="col-3">
+                    <div class="d-none d-sm-block col-sm-3">
                         <input class="form-control" @bind="todo.Description" @bind:event="oninput" @bind:after="() => DebounceSave(todo)" />
                     </div>
-                    <div class="col-3">
+                    <div class="d-none d-md-block col-md-3">
                         <input type="date" class="form-control" @bind="todo.DueDate" @bind:event="onchange" @bind:after="() => uow.TodoRepo.SaveTodos(todos)" min="@DateTime.Today.ToString("yyyy-MM-dd")" />
                     </div>
-                    <div class="col-3">
+                    <div class="col-4 col-sm-3">
                         <button class="btn btn-sm btn-danger" @onclick="() => RemoveSingle(todo)">X</button>
                     </div>
                 </div>
@@ -51,14 +52,14 @@
             <EditForm Model="@newtodo" OnValidSubmit="@AddTodo" FormName="TodoForm">
                  <DataAnnotationsValidator />
                 <div class="row g-2 mt-2">
-                    <div class="col-8">
+                    <div class="col-12 col-sm-8">
                         <InputText class="form-control" placeholder="Neues Todo..." @bind-Value="newtodo.Title"/>
                         <ValidationMessage For="() => newtodo.Title"/>
                     </div>
-                    <div class="col-2">
+                    <div class="col-6 col-sm-2">
                         <button type="submit" class="btn btn-primary w-100">Add</button>
                     </div>
-                    <div class="col-2">
+                    <div class="col-6 col-sm-2">
                         <button type="button" class="btn btn-secondary w-100" @onclick="removeFinishedTodos">Remove Done</button>
                     </div>
                 </div>
