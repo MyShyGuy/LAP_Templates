@@ -12,12 +12,14 @@ namespace BLDAL
     {
         private AppDBContext dbc;
         private UserRepo _usrRepo;
+        private TodoRepo _todoRepo;
         public UnitOfWork(AppDBContext context)
         {
             dbc = context;
         }
 
         public UserRepo Userrepo => _usrRepo ??= new UserRepo(dbc);
+        public TodoRepo TodoRepo => _todoRepo ??= new TodoRepo(dbc);
 
         public int Commit()
         {

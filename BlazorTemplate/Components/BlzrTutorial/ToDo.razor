@@ -10,14 +10,15 @@
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10 col-sm-12 text-center">
+        <div class="col-lg-8 col-md-10 col-sm-17 text-center">
             <h1>My ToDo List:</h1>
 
             <!-- Header für Grid -->
             <div class="row fw-bold border-bottom py-2">
                 <div class="col-1">Done</div>
-                <div class="col-3">Titel</div>
-                <div class="col-5">Beschreibung</div>
+                <div class="col-2">Titel</div>
+                <div class="col-3">Beschreibung</div>
+                <div class="col-3">Fälligkeitsdatum</div>
                 <div class="col-3">Aktion</div>
             </div>
 
@@ -26,13 +27,16 @@
             {
                 <div class="row align-items-center py-2 border-bottom">
                     <div class="col-1">
-                        <input type="checkbox" @bind="todo.IsDone" />
+                        <input type="checkbox" @bind="todo.IsDone" @bind:event="onchange" @bind:after="() => uow.TodoRepo.SaveTodos(todos)"/>
+                    </div>
+                    <div class="col-2">
+                        <input class="form-control" @bind="todo.Title" @onblur="() => uow.TodoRepo.SaveTodos(todos)"/>
                     </div>
                     <div class="col-3">
-                        <input class="form-control" @bind="todo.Title" />
+                        <input class="form-control" @bind="todo.Description" @bind:event="oninput" @bind:after="() => DebounceSave(todo)" />
                     </div>
-                    <div class="col-5">
-                        <input class="form-control" @bind="todo.Description" />
+                    <div class="col-3">
+                        <input type="date" class="form-control" @bind="todo.DueDate" @bind:event="onchange" @bind:after="() => uow.TodoRepo.SaveTodos(todos)" />
                     </div>
                     <div class="col-3">
                         <button class="btn btn-sm btn-danger" @onclick="() => RemoveSingle(todo)">X</button>
@@ -55,7 +59,7 @@
                         <button type="submit" class="btn btn-primary w-100">Add</button>
                     </div>
                     <div class="col-2">
-                        <button class="btn btn-secondary w-100" @onclick="removeFinishedTodos">Remove Done</button>
+                        <button type="button" class="btn btn-secondary w-100" @onclick="removeFinishedTodos">Remove Done</button>
                     </div>
                 </div>
             </EditForm>
@@ -73,6 +77,7 @@
         user = authState.User;
         string userName = user.Identity.Name.ToString();
         usr = uow.Userrepo.GetUser(userName);
+        todos = uow.TodoRepo.GetTodoDTOs(usr);
     }
     
     public List<TodoDTO> todos = new List<TodoDTO>();
@@ -87,15 +92,49 @@
             todos.Add(newtodo);
         }     
         newtodo = new TodoDTO();
+        uow.TodoRepo.SaveTodos(todos);
     }
 
     private void RemoveSingle(TodoDTO todo)
     {
-        todos.Remove(todo);
+        todo.IsDone = true;
+        removeFinishedTodos();
     }
 
     private async Task removeFinishedTodos()
     {
-        todos.RemoveAll(t => t.IsDone);
+        uow.TodoRepo.deleteTodos(todos);
+        todos = uow.TodoRepo.GetTodoDTOs(usr);
     }
+
+    // Dictionary um pro Todo einen Timer zu verwalten
+private Dictionary<TodoDTO, System.Threading.Timer> debounceTimers 
+    = new Dictionary<TodoDTO, System.Threading.Timer>();
+
+private void DebounceSave(TodoDTO todo)
+{
+    // Wenn schon ein Timer läuft → stoppen
+    if (debounceTimers.TryGetValue(todo, out var existingTimer))
+    {
+        existingTimer.Dispose();
+    }
+
+    // neuen Timer starten (10 Sekunden)
+    var timer = new System.Threading.Timer(_ =>
+    {
+        InvokeAsync(() =>
+        {
+            uow.TodoRepo.SaveTodos(todos);
+            debounceTimers.Remove(todo);
+        });
+    }, null, 10_000, Timeout.Infinite);
+
+    debounceTimers[todo] = timer;
+}
+
+private void SaveSingle(List<TodoDTO> todos)
+{
+    uow.TodoRepo.SaveTodos(todos);
+}
+
 }
