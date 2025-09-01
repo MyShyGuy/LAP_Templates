@@ -14,6 +14,5 @@ namespace BLDAL.Repos
         public List<TodoDTO> GetTodoDTOs(User usr);
         public void SaveTodos(List<TodoDTO> todos);
         public void deleteTodos(List<TodoDTO> todos);
-        public void SaveTodoDesc(List<TodoDTO> todos);
     }
 }

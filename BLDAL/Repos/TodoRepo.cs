@@ -54,11 +54,6 @@ namespace BLDAL.Repos
             }).ToList();
         }
 
-        public void SaveTodoDesc(List<TodoDTO> todos)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SaveTodos(List<TodoDTO> todos)
         {
             var TodosTOSave = new List<TodoItem>();

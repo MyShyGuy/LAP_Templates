@@ -1,13 +1,20 @@
 @page "/csv-upload"
 @using CsvHelper
+@using CsvHelper.Configuration
 @using System.Globalization
 @using Microsoft.AspNetCore.Components.Forms
 @attribute [StreamRendering]
 @attribute [Authorize(Roles = "Admin, Customer, Guest")]
+@rendermode InteractiveServer
 
 <h3>CSV Upload</h3>
 
 <InputFile OnChange="HandleFileSelected" accept=".csv" />
+
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger mt-3">@errorMessage</div>
+}
 
 @if (records != null && records.Any())
 {
@@ -20,14 +27,14 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in records)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Name</td>
-                    <td>@item.Created.ToString("yyyy-MM-dd")</td>
-                </tr>
-            }
+        @foreach (var item in records)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Created.ToString("yyyy-MM-dd")</td>
+            </tr>
+        }
         </tbody>
     </table>
 }
@@ -37,25 +44,49 @@ else
 }
 
 @code {
+    // WICHTIG: keine lokale Variable gleichen Namens im Handler verwenden!
     private List<MyModel> records = new();
+    private string? errorMessage;
 
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
+        errorMessage = null;
+
         var file = e.File;
-
-        var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024); // 10 MB
-        using var reader = new StreamReader(stream);
-        using var csv = new CsvReader(reader, new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
+        try
         {
-            Delimiter = ";"
-        });
+            // Browser-Stream -> MemoryStream (verhindert NotSupportedException)
+            await using var browserStream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+            using var ms = new MemoryStream();
+            await browserStream.CopyToAsync(ms);
+            ms.Position = 0;
 
+            using var reader = new StreamReader(ms);
+            using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = ";",
+                HasHeaderRecord = true,
+                DetectDelimiter = false
+            });
 
-        // CSV -> Objekte
-        records = csv.GetRecords<MyModel>().ToList();
+            // deutsches Datumsformat erlauben
+            csv.Context.TypeConverterOptionsCache
+               .GetOptions<DateTime>()
+               .Formats = new[] { "dd.MM.yyyy", "yyyy-MM-dd" };
+
+            // HIER: in die Feld-Property schreiben, NICHT in eine lokale Variable
+            records = csv.GetRecords<MyModel>().ToList();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message; // zur Diagnose im UI anzeigen
+            records = new();
+        }
+
+        // UI aktualisieren
+        await InvokeAsync(StateHasChanged);
     }
 
-    // Beispielmodell (muss zu deiner CSV passen)
     public class MyModel
     {
         public int Id { get; set; }
