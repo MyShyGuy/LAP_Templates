@@ -24,7 +24,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     options.LoginPath = "/login";
     options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
     options.AccessDeniedPath = "/access-denied";
-});
+}); //cookie not JWT
 
 // DbContext registrieren und Connection String aus appsettings.json laden
 builder.Services.AddDbContext<AppDBContext>(options =>
