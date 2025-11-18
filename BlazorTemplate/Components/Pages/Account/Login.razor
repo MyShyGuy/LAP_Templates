@@ -87,7 +87,7 @@
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, userAccount.UserName),
-                new Claim(ClaimTypes.Role, userAccount.Roles.FirstOrDefault().RoleName),
+                new Claim(ClaimTypes.Role, userAccount.Roles?.FirstOrDefault()?.RoleName),
                 new Claim("ip", ip ?? "unknown") // 🔹 IP als Claim hinzufügen
             };
 
@@ -100,7 +100,7 @@
             );
 
             USRlogger.LogInformation(
-                $"User Logged in: {principal.Identity?.Name} from {ip} at {DateTime.UtcNow}"
+                $"User Logged in: {principal.Identity?.Name} as a {principal.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).FirstOrDefault()} from {ip} at {DateTime.UtcNow}"
             );
         }
         catch (Exception ex)
@@ -109,6 +109,7 @@
             USRlogger.LogError(ex, "Authentifizierungsfehler");
         }
 
+        if (!string.IsNullOrEmpty(ErrorMessage)) return;
         NavigationManager.NavigateTo("/");
     }
 }

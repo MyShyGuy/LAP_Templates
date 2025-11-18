@@ -1,0 +1,212 @@
+@page "/matchinggame"
+@rendermode InteractiveServer
+@using System.Security.Claims
+@using System.Diagnostics
+@using DB_Models.Models
+@attribute [Authorize(Roles = "Admin, User, Guest")]
+@inject AuthenticationStateProvider AuthStateProvider
+@inject BLDAL.UnitOfWork uow;
+
+
+@code {
+    bool firstload = false;
+    bool startgame = false;
+    bool gameFinished = false;
+    string? username;
+
+    Stopwatch SW = new Stopwatch();
+    private string Time = "00:00:00.000";
+    private System.Threading.Timer? timer;
+    private string Buttonlabel = "Start";
+    User? UserRn;
+
+    List<RankingEntry>? RankingList;
+
+    Random random = new Random();
+
+    List<string> AnimalEmoji = new()
+    {
+        "🐙","🐙","🐟","🐟","😻","😻","🐻","🐻",
+        "🐕","🐕","🐭","🐭","🙈","🙈","🦒","🦒"
+    };
+
+    List<string> gridSolution = new(); // echte Emojis
+    List<string> gridDisplay = new();  // was der Spieler sieht
+
+    int? firstIndex = null;
+    int matchesFound = 0;
+
+    private void Start()
+    {
+        if (!startgame)
+        {
+            setupGame();
+            startgame = true;
+            Buttonlabel = "Stop";
+
+            if (!SW.IsRunning)
+            {
+                SW.Start();
+                timer = new System.Threading.Timer(UpdateUI, null, 0, 50);
+            }
+        }
+        else
+        {
+            Buttonlabel = "Start";
+            startgame = false;
+            SW.Reset();
+            timer?.Dispose();
+            timer = null;
+            Time = "00:00:00.000";
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void UpdateUI(object? state)
+    {
+        if(matchesFound == 8)
+        {
+            if(startgame)
+            {
+                gameFinished = true;
+            }
+            startgame = false;
+            SW.Stop();
+            Buttonlabel = "Restart";
+        }
+        Time = SW.Elapsed.ToString(@"hh\:mm\:ss\.fff");
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void GameWon()
+    {
+        User? UserRn = uow.Userrepo.GetUser(username);
+        RankingEntry entry = new();
+        entry.time = SW.Elapsed;
+        entry.user = UserRn;
+        entry.PlayedAtDate = DateTime.Now;
+        uow.RankingRepo.SaveRanking(entry);
+    }
+
+    private void setupGame()
+    {
+        SW.Reset();
+        timer?.Dispose();
+        timer = null;
+        Time = "00:00:00.000";
+        gridSolution.Clear();
+        gridDisplay.Clear();
+        var tempList = new List<string>(AnimalEmoji);
+
+        for (int i = 0; i < 16; i++)
+        {
+            int idx = random.Next(tempList.Count);
+            gridSolution.Add(tempList[idx]);
+            gridDisplay.Add(tempList[idx]); // direkt sichtbar, kein Aufdecken
+            tempList.RemoveAt(idx);
+        }
+        firstIndex = null;
+        matchesFound = 0;
+    }
+
+private void CompareEmoji(int index)
+{
+    if (firstIndex == null)
+    {
+        firstIndex = index;
+    }
+    else
+    {
+        if (gridSolution[firstIndex.Value] == gridSolution[index] && firstIndex != index)
+        {
+            gridDisplay[firstIndex.Value] = "X";
+            gridDisplay[index] = "X";
+            matchesFound++;
+        }
+        firstIndex = null; // Zurücksetzen, wenn das zweite Emoji geprüft wurde
+    }
+    StateHasChanged(); // UI neu rendern
+}
+
+
+    protected override async void OnInitialized()
+    {
+        base.OnInitialized();
+
+
+        if(!firstload)
+        {
+        for(int i = 0; i < 16; i++)
+        gridDisplay.Add("?");
+
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        username = user.FindFirst(ClaimTypes.Name)?.Value;
+        UserRn = uow.Userrepo.GetUser(username);
+
+        RankingList = uow.RankingRepo.GetRankings(UserRn)
+                             .OrderBy(r => r.time)
+                             .ToList();
+
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+{
+    if (gameFinished)
+    {
+        gameFinished = false; 
+        GameWon();             // ✔ jetzt sicher im UI-Thread!
+        RankingList = uow.RankingRepo.GetRankings(UserRn)
+                             .OrderBy(r => r.time)
+                             .ToList();
+        StateHasChanged();     // optional
+    }
+}
+}
+
+
+<div class="componentBorder">
+    <div class="grid-container">
+        @for (int i = 0; i < gridDisplay.Count; i++)
+        {
+            int currentindex = i;
+            <div class="grid-item" @onclick="() => CompareEmoji(currentindex)">
+                @gridDisplay[i]
+            </div>
+        }
+    </div>
+
+    <div class="banner">
+        <p>@Time</p>
+        <button class="UIB" @onclick="Start">@Buttonlabel</button>
+        <p>@username</p>
+    </div>
+
+    <div class="ranking-wrapper">
+        <h2 class="ranking-title">🏆 Bestzeiten</h2>
+
+        <div class="ranking-table">
+            <div class="ranking-header">
+                <div>#</div>
+                <div>Spieler</div>
+                <div>Datum</div>
+                <div>Zeit</div>
+            </div>
+
+            @if (RankingList != null)
+            {
+                @for (int i = 0; i < RankingList.Count; i++)
+                {
+                    <div class="ranking-row @(i % 2 == 0 ? "even" : "odd")">
+                        <div>@(i + 1)</div>
+                        <div>@RankingList[i].user.UserName</div>
+                        <div>@RankingList[i].PlayedAtDate.ToString("dd.MM.yyyy HH:mm")</div>
+                        <div>@RankingList[i].time.ToString(@"hh\:mm\:ss\.fff")</div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+</div>
