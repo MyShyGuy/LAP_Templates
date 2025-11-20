@@ -21,12 +21,12 @@ namespace BLDAL.Repos
 
         public void deleteRanking(RankingEntry Ranking)
         {
-            throw new NotImplementedException();
+            dbc.RankingLists.Remove(Ranking);
         }
 
         public List<RankingEntry> GetRankings(User usr)
         {
-            return dbc.RankingLists.Where(r => r.user.UserID == usr.UserID).ToList();
+            return dbc.RankingLists.Where(r => r.user.UserID == usr.UserID).OrderBy(t => t.time).Take(10).ToList();
         }
 
         public void SaveRanking(RankingEntry Ranking)

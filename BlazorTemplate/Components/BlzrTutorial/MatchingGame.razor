@@ -3,9 +3,9 @@
 @using System.Security.Claims
 @using System.Diagnostics
 @using DB_Models.Models
-@attribute [Authorize(Roles = "Admin, User, Guest")]
+@attribute [Authorize(Roles = "Admin, Customer, Guest")]
 @inject AuthenticationStateProvider AuthStateProvider
-@inject BLDAL.UnitOfWork uow;
+@inject BLDAL.UnitOfWork uow
 
 
 @code {
@@ -80,11 +80,14 @@
     private void GameWon()
     {
         User? UserRn = uow.Userrepo.GetUser(username);
+        if(UserRn != null)
+        {
         RankingEntry entry = new();
         entry.time = SW.Elapsed;
         entry.user = UserRn;
         entry.PlayedAtDate = DateTime.Now;
         uow.RankingRepo.SaveRanking(entry);
+        }
     }
 
     private void setupGame()
@@ -156,9 +159,7 @@
     {
         gameFinished = false; 
         GameWon();             // ✔ jetzt sicher im UI-Thread!
-        RankingList = uow.RankingRepo.GetRankings(UserRn)
-                             .OrderBy(r => r.time)
-                             .ToList();
+        RankingList = uow.RankingRepo.GetRankings(UserRn);
         StateHasChanged();     // optional
     }
 }

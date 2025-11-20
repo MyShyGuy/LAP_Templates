@@ -1,0 +1,16 @@
+﻿@page "/controls"
+@rendermode InteractiveServer
+@using System.Security.Claims
+@using System.Diagnostics
+@using DB_Models.Models
+@attribute [Authorize(Roles = "Admin, Customer, Guest")]
+@inject AuthenticationStateProvider AuthStateProvider
+@inject BLDAL.UnitOfWork uow
+
+
+<h3>Controls</h3>
+<InputNumber TValue="int?" @bind-Value="@testnumber" Placeholder="Enter shit" ></InputNumber>
+
+@code {
+    int? testnumber;
+}

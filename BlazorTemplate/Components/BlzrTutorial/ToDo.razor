@@ -3,7 +3,7 @@
 @using System.Security.Claims
 @using DB_Models.Models
 @rendermode InteractiveServer
-@attribute [Authorize(Roles = "Admin, User, Guest")]
+@attribute [Authorize(Roles = "Admin, Customer")]
 @inject BLDAL.UnitOfWork uow;
 @inject AuthenticationStateProvider AuthStateProvider
 
