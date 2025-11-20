@@ -6,8 +6,10 @@
 @using Microsoft.Extensions.Logging
 @inject ILogger<Login> USRlogger;
 @inject NavigationManager NavigationManager;
+@inject AuthenticationStateProvider AuthStateProvider;
 @inject BLDAL.UnitOfWork uow;
 @inject IHttpContextAccessor HttpContextAccessor;  
+@attribute [AllowAnonymous]
 
 <div class="row">
     <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
@@ -110,5 +112,17 @@
         }
 
         NavigationManager.NavigateTo("/");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            // Schon eingeloggt → zur Dashboard-Seite weiterleiten
+            NavigationManager.NavigateTo("/");
+        }
     }
 }

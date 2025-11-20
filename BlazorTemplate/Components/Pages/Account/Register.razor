@@ -1,11 +1,11 @@
 ﻿@page "/register"
-
 @using DB_Models.DTO;
 @using System.Security.Claims;
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Authentication.Cookies
 @using System.Text.RegularExpressions
 @inject NavigationManager NavigationManager;
+@inject AuthenticationStateProvider AuthStateProvider
 @inject BLDAL.UnitOfWork uow;
 
 @* <h3>Register</h3> *@
@@ -118,5 +118,17 @@
             return true;
         else
             return false;
+    }
+
+        protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            // Schon eingeloggt → zur Dashboard-Seite weiterleiten
+            NavigationManager.NavigateTo("/");
+        }
     }
 }
