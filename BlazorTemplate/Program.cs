@@ -1,4 +1,4 @@
-using BlazorTemplate.Components;
+﻿using BlazorTemplate.Components;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using BLDAL;
 using Microsoft.EntityFrameworkCore;
@@ -26,10 +26,20 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     options.AccessDeniedPath = "/access-denied";
 });
 
-// DbContext registrieren und Connection String aus appsettings.json laden
-builder.Services.AddDbContext<AppDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MyDatabase"))
-);
+//// DbContext registrieren und Connection String aus appsettings.json laden
+//builder.Services.AddDbContext<AppDBContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("MyDatabase"))
+//);
+
+// DbContextFactory registrieren -- added
+builder.Services.AddDbContextFactory<AppDBContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MyDatabase"));
+});
+
+builder.Services.AddQuickGridEntityFrameworkAdapter();
+
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // Für die abfrage der Client IP über HTTPContext
 builder.Services.AddHttpContextAccessor();
@@ -46,6 +56,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+    app.UseMigrationsEndPoint();
 }
 
 app.UseHttpsRedirection();

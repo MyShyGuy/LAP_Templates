@@ -74,7 +74,7 @@ else
                .GetOptions<DateTime>()
                .Formats = new[] { "dd.MM.yyyy", "yyyy-MM-dd" };
 
-            // HIER: in die Feld-Property schreiben, NICHT in eine lokale Variable
+            // HIER: in die Feld-Property schreiben
             records = csv.GetRecords<MyModel>().ToList();
         }
         catch (Exception ex)

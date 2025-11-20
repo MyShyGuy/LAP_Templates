@@ -10,6 +10,7 @@ namespace BLDAL
         { }
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
+        public virtual DbSet<Movie> Movies { get; set; } = null!;
         public virtual DbSet<TodoItem> Todos { get; set; } = null!;
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         // {
@@ -80,9 +81,6 @@ namespace BLDAL
                     RoleName = "Guest",
                     Notes = "Nur Lese Zugriff"
                 });
-
-
-            //hier noch die beziehung zwischen todoitems und user einfügen aka User has many Todoitems
         }
     }
 }

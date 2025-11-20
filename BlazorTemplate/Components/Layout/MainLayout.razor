@@ -2,7 +2,7 @@
 
 <div class="page">
     <div class="sidebar">
-        <NavMenu />
+        <NavMenu/>
     </div>
 
     <main>
@@ -19,7 +19,7 @@
             </AuthorizeView>
         </div>
 
-        <article class="content px-4">
+        <article class="content px-4" onclick="const nav=document.querySelector('#NavMenu'); if(nav && window.getComputedStyle(nav).display==='block'){ document.querySelector('.navbar-toggler').click(); }">
             @Body
         </article>
     </main>
@@ -30,3 +30,4 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+

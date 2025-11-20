@@ -14,7 +14,6 @@ namespace BLDAL.Repos
     {
         private readonly AppDBContext dbc;
         private readonly PasswordService PwS;
-
         public UserRepo(AppDBContext dbContext)
         {
             this.dbc = dbContext;
