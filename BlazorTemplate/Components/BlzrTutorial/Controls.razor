@@ -3,14 +3,207 @@
 @using System.Security.Claims
 @using System.Diagnostics
 @using DB_Models.Models
+@using System.ComponentModel.DataAnnotations
 @attribute [Authorize(Roles = "Admin, Customer, Guest")]
 @inject AuthenticationStateProvider AuthStateProvider
 @inject BLDAL.UnitOfWork uow
 
+<h2>Blazor Control Examples</h2>
 
-<h3>Controls</h3>
-<InputNumber TValue="int?" @bind-Value="@testnumber" Placeholder="Enter shit" ></InputNumber>
+<!-- GRID -->
+<div class="controls-grid">
+
+    <!-- TEXT INPUTS -->
+    <div class="control-card">
+        <h3>Text Inputs</h3>
+
+        <label>Einfacher Text:
+            <InputText @bind-Value="SimpleText" placeholder="Gib etwas ein..." />
+        </label>
+
+        <label>Langer Text:
+            <InputTextArea @bind-Value="LongText" rows="3" placeholder="Mehrzeiliger Text..." />
+        </label>
+    </div>
+
+    <!-- NUMBER INPUT -->
+    <div class="control-card">
+        <h3>Number Input</h3>
+
+        <InputNumber TValue="int?" @bind-Value="testnumber" placeholder="Zahl eingeben" />
+
+        @if (testnumber is not null)
+        {
+            <p>Du hast die Zahl <b>@testnumber</b> eingegeben.</p>
+        }
+    </div>
+
+    <!-- CHECKBOX -->
+    <div class="control-card">
+        <h3>Checkbox</h3>
+
+        <label>
+            <InputCheckbox @bind-Value="CheckBox" /> Checkbox aktivieren
+        </label>
+
+        @if (CheckBox)
+        {
+            <p><b>Checkbox ist aktiviert!</b></p>
+        }
+    </div>
+
+    <!-- SELECT -->
+    <div class="control-card">
+        <h3>Dropdown (InputSelect)</h3>
+
+        <label>Wähle eine Farbe:
+            <InputSelect @bind-Value="SelectedColor">
+                <option value="">-- Bitte wählen --</option>
+                <option value="Red">Rot</option>
+                <option value="Green">Grün</option>
+                <option value="Blue">Blau</option>
+            </InputSelect>
+        </label>
+
+        @if (!string.IsNullOrEmpty(SelectedColor))
+        {
+            <p>Gewählte Farbe: <b>@SelectedColor</b></p>
+        }
+    </div>
+
+    <!-- RADIO GROUP -->
+    <div class="control-card">
+        <h3>Radio Buttons</h3>
+
+        <InputRadioGroup TValue="string" @bind-Value="SelectedOption">
+            <label><InputRadio TValue="string" Value="OptionA" /> Option A</label><br />
+            <label><InputRadio TValue="string" Value="OptionB" /> Option B</label><br />
+            <label><InputRadio TValue="string" Value="OptionC" /> Option C</label>
+        </InputRadioGroup>
+
+        @if (!string.IsNullOrEmpty(SelectedOption))
+        {
+            <p>Du hast gewählt: <b>@SelectedOption</b></p>
+        }
+    </div>
+
+    <!-- DATE PICKER -->
+    <div class="control-card">
+        <h3>Date Picker</h3>
+
+        <label>Datum wählen:
+            <InputDate TValue="DateOnly?" @bind-Value="Date" />
+        </label>
+
+        @if (Date < DateOnly.FromDateTime(DateTime.Today))
+        {
+            <p class="warning">Das Datum liegt in der Vergangenheit!</p>
+        }
+    </div>
+
+    <!-- FILE UPLOAD -->
+    <div class="control-card">
+        <h3>Datei Upload</h3>
+
+        <InputFile OnChange="OnFileSelected" />
+
+        @if (!string.IsNullOrEmpty(UploadedFileName))
+        {
+            <p>Datei geladen: <b>@UploadedFileName</b></p>
+            <p>Datei Größe: <b>@FileSize</b> Bytes</p>
+            <p>Datei zuletzt bearbeitet: <b>@LastEdited</b></p>
+            <p>Datei Typ: <b>@Filetype</b></p>
+        }
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="control-card">
+        <h3>Buttons</h3>
+
+        <button @onclick="SayHello">Sag Hallo</button>
+
+        <p>@HelloMessage</p>
+    </div>
+
+    <!-- VALIDATION -->
+    <div class="control-card">
+        <h3>Validation Beispiel</h3>
+
+        <EditForm Model="@validationModel">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <label>Name:
+                <InputText @bind-Value="validationModel.Name" />
+            </label>
+            <ValidationMessage For="@(() => validationModel.Name)" />
+
+            <label>Alter:
+                <InputNumber @bind-Value="validationModel.Age" />
+            </label>
+            <ValidationMessage For="@(() => validationModel.Age)" />
+
+            <button type="submit">Speichern</button>
+        </EditForm>
+    </div>
+
+</div>
 
 @code {
+
+    // Text Inputs
+    string? SimpleText;
+    string? LongText;
+
+    // Number
     int? testnumber;
+
+    // Checkbox
+    bool CheckBox = false;
+
+    // Select
+    string? SelectedColor;
+
+    // Radio
+    string? SelectedOption;
+    string OptionA = "Option A";
+    string OptionB = "Option B";
+    string OptionC = "Option C";
+
+    // Date
+    DateOnly? Date = DateOnly.FromDateTime(DateTime.Today);
+
+    // File Upload
+    string? UploadedFileName;
+    long? FileSize;
+    DateTimeOffset? LastEdited;
+    string? Filetype;
+
+
+    private void OnFileSelected(InputFileChangeEventArgs e)
+    {
+        UploadedFileName = e.File.Name;
+        FileSize = e.File.Size;
+        LastEdited = e.File.LastModified;
+        Filetype = e.File.ContentType;
+    }
+
+    // Button Example
+    string HelloMessage = "";
+    void SayHello()
+    {
+        HelloMessage = "Hallo! Der Button funktioniert.";
+    }
+
+    // Validation Model
+    class ValidationModel
+    {
+        [Required]
+        public string? Name { get; set; }
+
+        [Range(1, 120)]
+        public int? Age { get; set; }
+    }
+
+    ValidationModel validationModel = new();
 }
