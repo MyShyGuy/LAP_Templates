@@ -1,0 +1,168 @@
+@page "/controlcenter"
+@rendermode InteractiveServer
+@using System.Security.Claims
+@using System.Diagnostics
+@using DB_Models.Models
+@attribute [Authorize(Roles ="Admin")]
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
+@inject BLDAL.UnitOfWork uow
+
+<h3 class="text-2xl font-bold mb-4">Control Center</h3>
+
+@if (selectedUser != null)
+{
+    <div class="role-box">
+        <h4 class="text-center">Rollen bearbeiten für @selectedUser.UserName</h4>
+        <hr />
+        <div class="d-flex justify-content-center">
+            <EditForm Model="@selectionModel" OnValidSubmit="SaveRoles">
+
+                <div class="mb-3;">
+                    <label class="fw-bold">Verfügbare Rollen:</label>
+
+                    @foreach (var role in allRoles)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                type="checkbox"
+                                checked="@selectionModel.SelectedRoles.Contains(role)"
+                                @onchange="(e => ToggleRole(role, e.Value))" />
+
+                            <label class="form-check-label">
+                                @role.RoleName
+                            </label>
+                        </div>
+                    }
+                </div>
+
+                <button class="btn btn-success" type="submit">Speichern</button>
+                <button class="btn btn-secondary ms-2" @onclick="Cancel">Abbrechen</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+
+@if (users == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table table-striped w-full">
+        <thead>
+            <tr>
+                <th class="d-none d-lg-table-cell">UserID</th>
+                <th>UserName</th>
+                <th>EntryDate</th>
+                <th>Rollen</th>
+                <th>Aktionen</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in users)
+            {
+                <tr>
+                    <td class="d-none d-lg-table-cell">@u.UserID</td>
+                    <td>@u.UserName</td>
+                    <td>@u.EntryDate.ToShortDateString()</td>
+                    <td>
+                        @foreach (var role in u.Roles)
+                        {
+                            <span class="badge bg-primary me-1">@role.RoleName</span>
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" @onclick="(() => EditUser(u))">Rollen zuweisen</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<User>? users;
+    private List<Role>? allRoles;
+
+    private User? selectedUser;
+    private RoleSelectionModel selectionModel = new();
+
+    protected override void OnInitialized()
+    {
+        users = uow.Userrepo.GetAllUsers();
+        allRoles = uow.Userrepo.GetAllRoles();
+    }
+
+    private void EditUser(User user)
+    {
+        selectedUser = user;
+
+        // existierende Rollen laden
+        var userRoles = uow.Userrepo.GetUserRoles(user);
+
+        selectionModel = new RoleSelectionModel();
+        selectionModel.SelectedRoles = new List<Role>(userRoles);
+    }
+
+    private void Cancel()
+    {
+        selectedUser = null;
+        selectionModel = new RoleSelectionModel();
+    }
+
+    private void ToggleRole(Role role, object? value)
+    {
+        bool isChecked = (bool)value!;
+
+        if (isChecked)
+        {
+            if (!selectionModel.SelectedRoles.Contains(role))
+                selectionModel.SelectedRoles.Add(role);
+        }
+        else
+        {
+            selectionModel.SelectedRoles.Remove(role);
+        }
+    }
+
+    private void SaveRoles()
+    {
+        if (selectedUser == null)
+            return;
+
+        var userInDb = uow.Userrepo.GetUser(selectedUser.UserName);
+
+        // Rollen aktualisieren
+        userInDb.Roles.Clear();
+        foreach (var role in selectionModel.SelectedRoles)
+        {
+            userInDb.Roles.Add(role);
+        }
+
+        uow.Commit();
+
+        selectedUser = null;
+        selectionModel = new RoleSelectionModel();
+
+        // Ansicht aktualisieren
+        users = uow.Userrepo.GetAllUsers();
+    }
+
+    public class RoleSelectionModel
+    {
+        public List<Role> SelectedRoles { get; set; } = new();
+    }
+
+        protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity != null && !user.IsInRole("Admin" ))
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}

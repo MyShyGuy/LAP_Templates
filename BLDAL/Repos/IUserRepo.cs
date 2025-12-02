@@ -14,5 +14,11 @@ namespace BLDAL.Repos
         User? UserLogin(LoginDTO usr);
 
         User GetUser(string username);
+
+        List<User> GetAllUsers();
+
+        Role GetUserRole(User username);
+        List<Role> GetAllRoles();
+        List<Role> GetUserRoles(User user);
     }
 }
