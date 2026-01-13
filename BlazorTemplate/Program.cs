@@ -62,7 +62,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-app.UseAntiforgery();
+// app.UseAntiforgery();
 
 app.UseAuthentication();
 app.UseAuthorization();

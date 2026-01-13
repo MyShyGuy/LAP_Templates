@@ -84,6 +84,10 @@ namespace BLDAL
                     RoleName = "Guest",
                     Notes = "Nur Lese Zugriff"
                 });
+
+            modelBuilder.Entity<Movie>()
+                .Property(m => m.Price)
+                .HasPrecision(10, 4);
         }
     }
 }

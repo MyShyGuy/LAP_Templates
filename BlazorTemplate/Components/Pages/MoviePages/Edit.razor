@@ -18,7 +18,7 @@ else
 {
     <div class="row">
         <div class="col-md-4">
-            <EditForm method="post" Model="Movie" OnValidSubmit="UpdateMovie" FormName="edit" Enhance>
+            <EditForm Model="Movie" OnValidSubmit="UpdateMovie">
                 <DataAnnotationsValidator />
                 <ValidationSummary role="alert"/>
                 <input type="hidden" name="Movie.Id" value="@Movie.Id" />
@@ -55,8 +55,6 @@ else
 @code {
     [SupplyParameterFromQuery]
     private int Id { get; set; }
-
-    [SupplyParameterFromForm]
     private Movie? Movie { get; set; }
 
     protected override async Task OnInitializedAsync()
