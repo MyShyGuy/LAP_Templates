@@ -12,6 +12,9 @@ namespace BLDAL
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Movie> Movies { get; set; } = null!;
         public virtual DbSet<TodoItem> Todos { get; set; } = null!;
+        public virtual DbSet<RankingEntry> RankingLists { get; set; } = null!;
+
+
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         // {
         //     if (!optionsBuilder.IsConfigured)
@@ -27,7 +30,7 @@ namespace BLDAL
         //man kann die migration auch über vscode mit dem dotnet befehl machen
         //dotnet tool install --global dotnet-ef
         //dotnet tool update --global dotnet-ef
-        //dotnet ef migrations add InitialCreate --project MyApp.DAL --startup-project MyApp.Blazor
+        //dotnet ef migrations add addnewclasses --project BLDAL --startup-project BlazorTemplate
         //dotnet ef database update --project BLDAL --startup-project BlazorTemplate
         //hier muss bedacht werden das dann die migration über DI läuft wärend mein connection string in den appsettings sind.
 

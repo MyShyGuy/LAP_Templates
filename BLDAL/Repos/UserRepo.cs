@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,9 +21,29 @@ namespace BLDAL.Repos
             PwS = new PasswordService();
         }
 
+        public Role GetUserRole(User username)
+        {
+            return dbc.Roles.Where(x => x.Users == username).FirstOrDefault();
+        }
+
+        public List<Role> GetAllRoles()
+        {
+            return dbc.Roles.ToList();
+        }
+
+        public List<Role> GetUserRoles(User user)
+        {
+            return dbc.Users.Where(x => x.UserName == user.UserName).SelectMany(u => u.Roles).ToList();
+        }
+
         public User? GetUser(string username)
         {
-            return dbc.Users.Where(x => x.UserName == username).FirstOrDefault();
+            return dbc.Users.Where(x => x.UserName == username).Include(r => r.Roles).FirstOrDefault();
+        }
+
+        public List<User> GetAllUsers()
+        {
+            return dbc.Users.Include(u => u.Roles).ToList();
         }
 
         public User? RegisterUser(LoginDTO usr)
