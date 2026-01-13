@@ -43,6 +43,13 @@
     </div>
 }
 
+<div class="search-wrapper">
+    <div class="search-container">
+        <input class="search-input" placeholder="User suchen..." @bind="searchText" @bind:event="oninput" />
+        <i class="search-icon">🔍</i>
+    </div>
+</div>
+
 
 @if (users == null)
 {
@@ -61,6 +68,8 @@ else
             </tr>
         </thead>
         <tbody>
+        @if(FilteredUsers == null)
+        {
             @foreach (var u in users)
             {
                 <tr>
@@ -78,11 +87,38 @@ else
                     </td>
                 </tr>
             }
+        }
+        else
+        {
+        @foreach (var u in FilteredUsers)
+            {
+                <tr>
+                    <td class="d-none d-lg-table-cell">@u.UserID</td>
+                    <td>@u.UserName</td>
+                    <td>@u.EntryDate.ToShortDateString()</td>
+                    <td>
+                        @foreach (var role in u.Roles)
+                        {
+                            <span class="badge bg-primary me-1">@role.RoleName</span>
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" @onclick="(() => EditUser(u))">Rollen zuweisen</button>
+                    </td>
+                </tr>
+            }
+        }
+
         </tbody>
     </table>
 }
 
 @code {
+    private string? searchText;
+    private IEnumerable<User> FilteredUsers =>
+        string.IsNullOrWhiteSpace(searchText)
+        ? users ?? new()
+        : users!.Where(u => u.UserName.Contains(searchText, StringComparison.OrdinalIgnoreCase));
     private List<User>? users;
     private List<Role>? allRoles;
 
@@ -155,7 +191,7 @@ else
         public List<Role> SelectedRoles { get; set; } = new();
     }
 
-        protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
