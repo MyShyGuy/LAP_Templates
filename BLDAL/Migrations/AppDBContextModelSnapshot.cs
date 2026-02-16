@@ -22,6 +22,34 @@ namespace BLDAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DB_Models.Models.Movie", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Genre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(10, 4)
+                        .HasColumnType("decimal(10,4)");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Movies");
+                });
+
             modelBuilder.Entity("DB_Models.Models.RankingEntry", b =>
                 {
                     b.Property<int>("RankID")
@@ -44,33 +72,6 @@ namespace BLDAL.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("Ranking", "rkg");
-                });
-
-            modelBuilder.Entity("DB_Models.Models.Movie", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Genre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Movies");
                 });
 
             modelBuilder.Entity("DB_Models.Models.Role", b =>

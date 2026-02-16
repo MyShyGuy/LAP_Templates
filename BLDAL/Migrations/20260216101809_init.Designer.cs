@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BLDAL.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20251103142411_addnewclassesss")]
-    partial class addnewclassesss
+    [Migration("20260216101809_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,34 @@ namespace BLDAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DB_Models.Models.Movie", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Genre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(10, 4)
+                        .HasColumnType("decimal(10,4)");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Movies");
+                });
 
             modelBuilder.Entity("DB_Models.Models.RankingEntry", b =>
                 {

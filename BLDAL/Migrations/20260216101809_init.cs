@@ -14,7 +14,26 @@ namespace BLDAL.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
+                name: "rkg");
+
+            migrationBuilder.EnsureSchema(
                 name: "usr");
+
+            migrationBuilder.CreateTable(
+                name: "Movies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(10,4)", precision: 10, scale: 4, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Movies", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Roles",
@@ -44,6 +63,28 @@ namespace BLDAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ranking",
+                schema: "rkg",
+                columns: table => new
+                {
+                    RankID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    time = table.Column<TimeSpan>(type: "time", nullable: false),
+                    PlayedAtDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ranking", x => x.RankID);
+                    table.ForeignKey(
+                        name: "FK_Ranking_Users_UserID",
+                        column: x => x.UserID,
+                        principalSchema: "usr",
+                        principalTable: "Users",
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -111,6 +152,12 @@ namespace BLDAL.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Ranking_UserID",
+                schema: "rkg",
+                table: "Ranking",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Roles_RoleName",
                 schema: "usr",
                 table: "Roles",
@@ -140,6 +187,13 @@ namespace BLDAL.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Movies");
+
+            migrationBuilder.DropTable(
+                name: "Ranking",
+                schema: "rkg");
+
             migrationBuilder.DropTable(
                 name: "RoleUser",
                 schema: "usr");

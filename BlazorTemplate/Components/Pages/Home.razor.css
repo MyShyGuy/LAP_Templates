@@ -1,0 +1,136 @@
+.full-background {
+    min-height: 100vh;
+    width: 100%;
+
+    background-image: url("/images/Backround.jpg"); /* Pfad anpassen */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Vollbild Hintergrund */
+.hero-section {
+    min-height: 100vh;
+    width: 100%;
+
+    background-image: url("/images/background.jpg"); /* anpassen */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Dunkle Box */
+.hero-overlay {
+    background: rgba(0, 0, 0, 0.65);
+
+    /* padding: 50px; */
+    border-radius: 18px;
+
+    max-width: 600px;
+    width: 100%;
+    height: 100%;
+
+    text-align: center;
+    color: white;
+}
+
+/* Titel */
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* Untertitel */
+.hero-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+/* Formular */
+.form-group {
+    margin-bottom: 15px;
+    text-align: center;
+    justify-content: center;
+}
+
+/* Formular-Felder moderner & dezenter */
+.form-group input {
+    width: 100% !important;
+    max-width: 500px !important;   /* Macht die Felder breiter */
+
+    padding: 12px 14px;
+
+    border-radius: 10px;
+
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+
+    font-size: 1rem;
+
+    backdrop-filter: blur(6px);
+
+    transition: all 0.2s ease;
+}
+
+/* Placeholder Farbe */
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Fokus-Effekt */
+.form-group input:focus {
+    outline: none;
+
+    border-color: #0d6efd;
+
+    background: rgba(255, 255, 255, 0.25);
+
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.3);
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.form-group input {
+    width: 100% !important;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+}
+
+/* Button */
+.form-button {
+    width: 100%;
+    margin-top: 15px;
+
+    padding: 12px;
+
+    background: #0d6efd;
+    color: white;
+
+    border: none;
+    border-radius: 8px;
+
+    font-size: 1.1rem;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.form-button:hover {
+    background: #084298;
+}
