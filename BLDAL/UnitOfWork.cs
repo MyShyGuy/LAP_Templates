@@ -13,7 +13,6 @@ namespace BLDAL
         private AppDBContext dbc;
         private UserRepo _usrRepo;
         private TodoRepo _todoRepo;
-        private RankingRepo _rankingRepo;
         public UnitOfWork(AppDBContext context)
         {
             dbc = context;
@@ -21,7 +20,6 @@ namespace BLDAL
 
         public UserRepo Userrepo => _usrRepo ??= new UserRepo(dbc);
         public TodoRepo TodoRepo => _todoRepo ??= new TodoRepo(dbc);
-        public RankingRepo RankingRepo => _rankingRepo ??= new RankingRepo(dbc);
 
         public int Commit()
         {

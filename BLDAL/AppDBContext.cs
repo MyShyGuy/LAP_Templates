@@ -10,9 +10,7 @@ namespace BLDAL
         { }
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
-        public virtual DbSet<Movie> Movies { get; set; } = null!;
         public virtual DbSet<TodoItem> Todos { get; set; } = null!;
-        public virtual DbSet<RankingEntry> RankingLists { get; set; } = null!;
 
 
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
