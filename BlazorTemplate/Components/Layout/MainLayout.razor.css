@@ -6,6 +6,7 @@
 
 main {
     flex: 1;
+    background-color: #0c024e;
 }
 
 .sidebar {
@@ -13,7 +14,7 @@ main {
 }
 
 .top-row {
-    background-color: #f7f7f7;
+    background-color: #0c024e;
     border-bottom: 1px solid black;
     justify-content: flex-end;
     height: 3.5rem;
@@ -35,20 +36,24 @@ main {
     text-decoration: none;
 }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
+.top-row ::deep a, .top-row ::deep .btn-link {
+    white-space: nowrap;
+    margin-left: 1.5rem;
+    text-decoration: none;
+}
 
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
+.top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
+    text-decoration: underline;
+}
 
-    .top-row ::deep a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.top-row ::deep a:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.content {
+    padding: 0% !important;
+}
 
 @media (max-width: 640.98px) {
     .top-row {

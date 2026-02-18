@@ -106,13 +106,16 @@
 
     private bool isValid(string pw)
     {
-        var isv = Regex.IsMatch(pw,
+        @* var isv = Regex.IsMatch(pw,
         @"^(?=.*[a-z])      # mind. 1 Kleinbuchstabe
               (?=.*[A-Z])      # mind. 1 Großbuchstabe
               (?=.*\d)         # mind. 1 Zahl
               (?=.*[^a-zA-Z\d])# mind. 1 Sonderzeichen
               .{8,}$           # mindestens 8 Zeichen
-            ", RegexOptions.IgnorePatternWhitespace);
+            ", RegexOptions.IgnorePatternWhitespace); *@
+
+
+            var isv = true;     //remove after adding admin acc
 
         if (isv)
             return true;

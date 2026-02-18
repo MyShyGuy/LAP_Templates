@@ -1,4 +1,7 @@
 ﻿@page "/"
+@using DB_Models.DTO
+@using Microsoft.AspNetCore.Components.Forms
+@inject BLDAL.UnitOfWork uow
 
 <PageTitle>Home</PageTitle>
 <div class="full-background">
@@ -16,21 +19,26 @@
             Jetzt anmelden!
         </p>
 
-        <EditForm Model="anmeldung" OnValidSubmit="HandleSubmit">
+        <EditForm EditContext="@editContext" OnValidSubmit="HandleSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
             <div class="form-group">
-                <label>Name</label>
-                <InputText @bind-Value="anmeldung.Name" />
+                <label for="name">Name</label>
+                <InputText id="name" class="form-control" @bind-Value="anmeldung.Name" />
+                <ValidationMessage For="() => anmeldung.Name" />
             </div>
 
             <div class="form-group">
-                <label>E-Mail</label>
-                <InputText @bind-Value="anmeldung.Email" />
+                <label for="email">E-Mail</label>
+                <InputText id="email" class="form-control" @bind-Value="anmeldung.Email" />
+                <ValidationMessage For="() => anmeldung.Email" />
             </div>
 
             <div class="form-group">
-                <label>Telefon</label>
-                <InputText @bind-Value="anmeldung.Telefon"  />
+                <label for="phone">Telefon</label>
+                <InputText id="phone" class="form-control" @bind-Value="anmeldung.PhoneNumber" />
+                <ValidationMessage For="() => anmeldung.PhoneNumber" />
             </div>
 
             <button type="submit" class="form-button">
@@ -43,23 +51,39 @@
 
 </div>
 
-
 </div>
 
 @code {
+    private TRegisterDTO anmeldung = new();
+    private EditContext editContext;
 
-    Anmeldung anmeldung = new();
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(anmeldung);
+    }
 
-    void HandleSubmit()
+    private async Task HandleSubmit()
     {
         Console.WriteLine($"Anmeldung: {anmeldung.Name}");
-    }
 
-    class Anmeldung
-    {
-        public string? Name { get; set; }
-        public string? Email { get; set; }
-        public string? Telefon { get; set; }
-    }
+        try
+        {
+            // Persist the registration using UnitOfWork
+            // Example (implement a proper repo and method first):
+            // uow.RegistrationRepo.Add(new Registration { Name = anmeldung.Name, Email = anmeldung.Email, Phone = anmeldung.PhoneNumber });
+            // uow.Commit();
 
+            // If you don't have a RegistrationRepo yet, add one in BLDAL and expose it via UnitOfWork,
+            // similar to how Userrepo, TodoRepo or RankingRepo are exposed.
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error saving registration: {ex.Message}");
+        }
+
+        // Reset form + validation state
+        anmeldung = new TRegisterDTO();
+        editContext = new EditContext(anmeldung);
+        await InvokeAsync(StateHasChanged);
+    }
 }
