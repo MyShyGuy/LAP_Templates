@@ -10,6 +10,7 @@
 4. [Die docker-compose.yml dieses Projekts](#4-die-docker-composeyml-dieses-projekts)
 5. [Die wichtigsten Docker-Befehle](#5-die-wichtigsten-docker-befehle)
 6. [Typischer Workflow](#6-typischer-workflow)
+7. [Mit SQL Server Management Studio verbinden](#7-mit-sql-server-management-studio-verbinden)
 
 ---
 
@@ -225,6 +226,31 @@ Von außen (Host) kannst du per `localhost:5000` (Web) und `localhost:1433` (DB)
 | `docker compose ps` | Zeigt Status aller Compose-Services. |
 | `docker compose restart web` | Startet einzelnen Service neu. |
 
+### Volumes
+
+| Befehl | Beschreibung |
+|---|---|
+| `docker volume ls` | Listet alle vorhandenen Volumes auf. |
+| `docker volume inspect <volume-name>` | Zeigt Details eines Volumes, inkl. `Mountpoint` (realer Speicherort auf dem Host). |
+| `docker compose config --volumes` | Zeigt die in Compose definierten Volume-Namen. |
+
+**Wichtig bei Docker Compose:**
+Compose setzt standardmaessig einen Projekt-Praefix vor den Volume-Namen.
+
+Beispiel in diesem Projekt:
+- In der Compose-Datei steht: `mssql_data`
+- Tatsaechlicher Docker-Name kann sein: `dockerlearning_mssql_data`
+
+Darum funktioniert oft nicht:
+```bash
+docker volume inspect mssql_data
+```
+
+Sondern stattdessen:
+```bash
+docker volume inspect dockerlearning_mssql_data
+```
+
 ### Aufräumen
 
 | Befehl | Beschreibung |
@@ -282,6 +308,41 @@ docker exec -it blazor bash
 docker compose down -v
 docker compose up -d
 ```
+
+---
+
+## 7. Mit SQL Server Management Studio verbinden
+
+Wenn dein `db`-Container laeuft und Port `1433:1433` gemappt ist, kannst du dich direkt mit SSMS verbinden.
+
+### 1) Container und Port pruefen
+
+```bash
+docker compose ps
+```
+
+Der `db`-Service sollte `Up` sein und `0.0.0.0:1433->1433/tcp` anzeigen.
+
+### 2) In SSMS folgende Daten eintragen
+
+- Server type: `Database Engine`
+- Server name: `localhost,1433`
+- Authentication: `SQL Server Authentication`
+- Login: `sa`
+- Password: `TestingDockeronWindows2022!`
+
+### 3) Falls Zertifikatsfehler kommt
+
+In SSMS auf `Options` gehen und unter `Connection Properties` die Option `Trust server certificate` aktivieren.
+
+### 4) Optional: Schnelltest in SSMS
+
+```sql
+SELECT @@VERSION;
+SELECT name FROM sys.databases;
+```
+
+Wenn Ergebnisse kommen, steht die Verbindung.
 
 ---
 

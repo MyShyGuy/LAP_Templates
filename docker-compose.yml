@@ -1,0 +1,24 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql
+    environment:
+      SA_PASSWORD: "${SA_PASSWORD}"
+      ACCEPT_EULA: "${ACCEPT_EULA}"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+  web:
+    build: ./LAP_Templates
+    container_name: blazor
+    ports:
+      - "5000:8080"
+    depends_on:
+      - db
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=db;Database=${DB_NAME};User Id=${DB_USER};Password=${SA_PASSWORD};TrustServerCertificate=${DB_TRUST_SERVER_CERTIFICATE}"
+
+volumes:
+  mssql_data:
