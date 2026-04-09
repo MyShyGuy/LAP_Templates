@@ -9,7 +9,7 @@ namespace BLDAL
         {
             var connectionString =
                 Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
-                ?? "Server=(localdb)\\MSSQLLocalDB;Database=BlazorTemplateDesignTime;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
+                ?? throw new InvalidOperationException("Es wurde kein ConnectionString für die Datenbank konfiguriert.");
 
             var optionsBuilder = new DbContextOptionsBuilder<AppDBContext>();
             optionsBuilder.UseSqlServer(connectionString);
