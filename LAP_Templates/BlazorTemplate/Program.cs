@@ -1,7 +1,9 @@
 ﻿using BlazorTemplate.Components;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 using BLDAL;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,15 @@ builder.Services.AddLogging(logging =>
     logging.AddDebug();       // Visual Studio Debug
     logging.SetMinimumLevel(LogLevel.Information); // Level
 });
+
+var dataProtectionPath = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true"
+    ? "/app/keys"
+    : Path.Combine(builder.Environment.ContentRootPath, ".keys");
+Directory.CreateDirectory(dataProtectionPath);
+
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionPath))
+    .SetApplicationName("BlazorTemplate");
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -31,10 +42,19 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 //    options.UseSqlServer(builder.Configuration.GetConnectionString("MyDatabase"))
 //);
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? builder.Configuration.GetConnectionString("MyDatabase")
+    ?? throw new InvalidOperationException("Es wurde kein ConnectionString für die Datenbank konfiguriert.");
+
 // DbContextFactory registrieren -- added
 builder.Services.AddDbContextFactory<AppDBContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MyDatabase"));
+    options.UseSqlServer(connectionString);
+});
+
+builder.Services.AddDbContext<AppDBContext>(options =>
+{
+    options.UseSqlServer(connectionString);
 });
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();
@@ -49,6 +69,37 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<BLDAL.UnitOfWork>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDBContext>>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("StartupMigration");
+    const int maxRetries = 10;
+    var migrated = false;
+
+    for (var attempt = 1; attempt <= maxRetries; attempt++)
+    {
+        try
+        {
+            await using var dbContext = await dbFactory.CreateDbContextAsync();
+            logger.LogInformation("Wende EF-Migrationen an ({Attempt}/{MaxRetries}) ...", attempt, maxRetries);
+            await dbContext.Database.MigrateAsync();
+            logger.LogInformation("Datenbank ist aktuell.");
+            migrated = true;
+            break;
+        }
+        catch (Exception ex) when (attempt < maxRetries)
+        {
+            logger.LogWarning(ex, "Datenbank noch nicht bereit. Neuer Versuch in 5 Sekunden ...");
+            await Task.Delay(TimeSpan.FromSeconds(5));
+        }
+    }
+
+    if (!migrated)
+    {
+        throw new InvalidOperationException("Die Datenbankmigration konnte nach mehreren Versuchen nicht angewendet werden.");
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

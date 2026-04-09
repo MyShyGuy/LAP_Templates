@@ -2,6 +2,20 @@
 
 ---
 
+## Schnellstart – wichtigste Befehle
+
+| Zweck | Befehl |
+|---|---|
+| Projekt bauen und starten | `docker compose up --build -d` |
+| Status der Container prüfen | `docker compose ps` |
+| Live-Logs der Web-App ansehen | `docker compose logs -f web` |
+| Alle Services stoppen und entfernen | `docker compose down` |
+| DB und Volumes komplett zurücksetzen | `docker compose down -v` |
+| Nur den Web-Service neu bauen | `docker compose up --build -d web` |
+| Tabellen in SQL Server prüfen | `docker exec mssql /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "<PASSWORT>" -Q "SELECT TABLE_SCHEMA, TABLE_NAME FROM MyDb.INFORMATION_SCHEMA.TABLES;" -C` |
+
+> **Hinweis:** Wenn nach einem Neuaufbau Login- oder Register-Probleme mit Antiforgery auftreten, Browser-Cookies für `localhost:5000` löschen oder ein Inkognito-Fenster verwenden.
+
 ## Inhaltsverzeichnis
 
 1. [Was ist Docker?](#1-was-ist-docker)
@@ -131,6 +145,12 @@ services:
       - "1433:1433"
     volumes:
       - mssql_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$SA_PASSWORD\" -Q \"SELECT 1\" -C || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
 
   web:
     build: ./LAP_Templates
@@ -138,12 +158,16 @@ services:
     ports:
       - "5000:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       ConnectionStrings__DefaultConnection: "Server=db;Database=MyDb;User Id=sa;Password=TestingDockeronWindows2022!;TrustServerCertificate=True"
+    volumes:
+      - dp_keys:/app/keys
 
 volumes:
   mssql_data:
+  dp_keys:
 ```
 
 ### Service: `db` (SQL Server)
@@ -154,8 +178,9 @@ volumes:
 | `container_name: mssql` | Gibt dem Container den fixen Namen `mssql`. |
 | `SA_PASSWORD` | Passwort für den SQL-Server-Admin-Account (`sa`). |
 | `ACCEPT_EULA: "Y"` | Pflichtfeld – akzeptiert die Lizenzvereinbarung von Microsoft SQL Server. |
-| `ports: "1433:1433"` | SQL Server läuft auf Port 1433. Wird nach außen weitergeleitet, sodass SSMS o. Ä. direkt verbinden kann. |
-| `volumes: mssql_data:/var/opt/mssql` | Persistiert die Datenbankdaten in einem Named Volume. Daten bleiben erhalten, auch wenn der Container neu gestartet wird. |
+| `ports: "1433:1433"` | SQL Server läuft auf Port 1433 und kann von außen erreicht werden. |
+| `volumes: mssql_data:/var/opt/mssql` | Persistiert die eigentlichen Datenbankdaten in einem Named Volume. |
+| `healthcheck` | Prüft aktiv, ob SQL Server wirklich bereit ist. Erst dann soll die Web-App starten. |
 
 ### Service: `web` (Blazor App)
 
@@ -163,18 +188,27 @@ volumes:
 |---|---|
 | `build: ./LAP_Templates` | Baut das Image anhand des Dockerfiles in `./LAP_Templates`. |
 | `container_name: blazor` | Fixer Container-Name. |
-| `ports: "5000:8080"` | Die App ist im Browser unter `http://localhost:5000` erreichbar. Intern hört ASP.NET auf Port 8080. |
-| `depends_on: db` | Startet den `db`-Container zuerst, bevor `web` gestartet wird. |
-| `ConnectionStrings__DefaultConnection` | Übergibt den Connection String als Umgebungsvariable. In der App wird `"Server=db"` verwendet – `db` ist der Service-Name und fungiert als Hostname im Docker-internen Netzwerk. |
+| `ports: "5000:8080"` | Die App ist im Browser unter `http://localhost:5000` erreichbar. |
+| `depends_on: db: condition: service_healthy` | Die App wartet, bis SQL Server nicht nur gestartet, sondern auch **gesund** ist. |
+| `ConnectionStrings__DefaultConnection` | Übergibt den Connection String als Umgebungsvariable. `Server=db` funktioniert, weil `db` der Hostname im Compose-Netzwerk ist. |
+| `volumes: dp_keys:/app/keys` | Persistiert ASP.NET-Core-DataProtection-Keys. Das verhindert viele Antiforgery-/Cookie-Probleme nach Neustarts. |
 
 ### Volumes-Sektion
 
 ```yaml
 volumes:
   mssql_data:
+  dp_keys:
 ```
 
-Deklariert das Named Volume `mssql_data`. Docker verwaltet es automatisch. Daten landen auf dem Host unter einem Docker-verwalteten Pfad – kein manueller Ordner nötig.
+- `mssql_data` speichert die SQL-Server-Daten dauerhaft.
+- `dp_keys` speichert die ASP.NET-Core-Schlüssel für Cookies, Login und Antiforgery.
+
+### Warum sind `healthcheck`, `dp_keys` und Migrationen wichtig?
+
+- **Healthcheck:** `depends_on` allein regelt nur die Startreihenfolge. Mit `service_healthy` wartet die Web-App wirklich auf eine bereite DB.
+- **`dp_keys`:** Ohne persistente DataProtection-Keys können alte Browser-Cookies oder Antiforgery-Tokens nach einem Rebuild nicht mehr entschlüsselt werden.
+- **Migrationen:** Die App führt beim Start automatisch `Database.MigrateAsync()` aus. Das klappt aber nur, wenn vorher EF-Migrationsdateien im Projekt vorhanden sind.
 
 ### Wie kommunizieren die Container miteinander?
 
@@ -267,13 +301,29 @@ docker volume inspect dockerlearning_mssql_data
 
 ```bash
 # Im Wurzelverzeichnis (wo die docker-compose.yml liegt)
-docker compose up --build
+docker compose up --build -d
 ```
 
 - Images werden gebaut (Blazor aus Dockerfile, SQL Server wird gezogen).
-- Container starten: zuerst `db`, dann `web`.
+- `db` wird zuerst gestartet und per Healthcheck geprüft.
+- Danach startet `web`.
+- Beim App-Start werden vorhandene EF-Migrationen automatisch angewendet.
 - App erreichbar unter: **http://localhost:5000**
 - DB erreichbar unter: **localhost:1433** (z. B. mit SSMS oder Azure Data Studio)
+
+### Änderungen am Datenmodell
+
+Wenn du neue Entities, Properties oder Relations ergänzt, musst du **zuerst eine Migration erzeugen**:
+
+```bash
+dotnet ef migrations add NeueMigration --project .\LAP_Templates\BLDAL --startup-project .\LAP_Templates\BlazorTemplate
+```
+
+Danach reicht wieder:
+
+```bash
+docker compose up --build -d
+```
 
 ### Änderungen deployen
 

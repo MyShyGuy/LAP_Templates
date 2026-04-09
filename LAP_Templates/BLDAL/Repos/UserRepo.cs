@@ -56,13 +56,13 @@ namespace BLDAL.Repos
 
 
                 // Suche die "Guest"-Rolle in der Datenbank
-                // var guestRole = dbc.Roles.FirstOrDefault(r => r.RoleName == "Admin");
+                var guestRole = dbc.Roles.FirstOrDefault(r => r.RoleName == "Admin");
                 // var guestRole1 = dbc.Roles.FirstOrDefault(r => r.RoleName == "Customer");
                 var guestRole2 = dbc.Roles.FirstOrDefault(r => r.RoleName == "Guest");
                 var roles = new List<Role>();
                 if (guestRole2 != null)
                 {
-                    // roles.Add(guestRole);
+                    roles.Add(guestRole);
                     // roles.Add(guestRole1);
                     roles.Add(guestRole2);
                 }
