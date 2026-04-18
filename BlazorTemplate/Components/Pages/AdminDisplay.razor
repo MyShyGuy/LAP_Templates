@@ -11,7 +11,7 @@
 
 <section class="admin-shell">
     <h1>Display Verwaltung</h1>
-    <p class="intro">Hier verwaltest du Werbebilder, Bar-Menue und zeitgesteuerte Aktionen.</p>
+    <p class="intro">Hier verwaltest du die Werbebilder fuer die Display-Seite.</p>
 
     <div class="grid-layout">
         <article class="panel">
@@ -60,118 +60,17 @@
                 }
             </div>
         </article>
-
-        <article class="panel">
-            <h2>Bar Menue</h2>
-            <div class="form-block">
-                <label>Bezeichnung</label>
-                <InputText class="form-control" @bind-Value="newMenuItem.Title" />
-
-                <label>Beschreibung</label>
-                <InputText class="form-control" @bind-Value="newMenuItem.Description" />
-
-                <label>Preis</label>
-                <InputNumber class="form-control" @bind-Value="newMenuItem.Price" />
-
-                <label>Reihenfolge</label>
-                <InputNumber class="form-control" @bind-Value="newMenuItem.DisplayOrder" />
-
-                <label><InputCheckbox @bind-Value="newMenuItem.IsActive" /> Aktiv</label>
-                <button class="btn btn-primary" @onclick="AddMenuItem">Menuepunkt anlegen</button>
-            </div>
-
-            @foreach (var menuItem in menuItems)
-            {
-                <div class="line-item compact">
-                    <div class="line-fields">
-                        <InputText class="form-control" @bind-Value="menuItem.Title" />
-                        <InputText class="form-control" @bind-Value="menuItem.Description" />
-                        <InputNumber class="form-control" @bind-Value="menuItem.Price" />
-                        <InputNumber class="form-control" @bind-Value="menuItem.DisplayOrder" />
-                        <label><InputCheckbox @bind-Value="menuItem.IsActive" /> Aktiv</label>
-                    </div>
-                    <div class="line-actions">
-                        <button class="btn btn-sm btn-primary" @onclick="() => SaveMenuItem(menuItem)">Speichern</button>
-                        <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteMenuItem(menuItem.MenuItemID)">Loeschen</button>
-                    </div>
-                </div>
-            }
-        </article>
     </div>
-
-    <article class="panel full-width">
-        <h2>Bar Aktionen (Datum/Uhrzeit von-bis)</h2>
-
-        <div class="form-block action-grid">
-            <div>
-                <label>Titel</label>
-                <InputText class="form-control" @bind-Value="newBarAction.Title" />
-            </div>
-            <div>
-                <label>Details</label>
-                <InputText class="form-control" @bind-Value="newBarAction.Details" />
-            </div>
-            <div>
-                <label>Von</label>
-                <InputDate class="form-control" @bind-Value="newBarAction.StartsAt" Type="InputDateType.DateTimeLocal" />
-            </div>
-            <div>
-                <label>Bis</label>
-                <InputDate class="form-control" @bind-Value="newBarAction.EndsAt" Type="InputDateType.DateTimeLocal" />
-            </div>
-            <div>
-                <label><InputCheckbox @bind-Value="newBarAction.IsActive" /> Aktiv</label>
-            </div>
-            <div>
-                <button class="btn btn-primary" @onclick="AddBarAction">Aktion anlegen</button>
-            </div>
-        </div>
-
-        @foreach (var barAction in barActions)
-        {
-            <div class="line-item compact">
-                <div class="line-fields action-grid">
-                    <InputText class="form-control" @bind-Value="barAction.Title" />
-                    <InputText class="form-control" @bind-Value="barAction.Details" />
-                    <InputDate class="form-control" @bind-Value="barAction.StartsAt" Type="InputDateType.DateTimeLocal" />
-                    <InputDate class="form-control" @bind-Value="barAction.EndsAt" Type="InputDateType.DateTimeLocal" />
-                    <label><InputCheckbox @bind-Value="barAction.IsActive" /> Aktiv</label>
-                </div>
-                <div class="line-actions">
-                    <button class="btn btn-sm btn-primary" @onclick="() => SaveBarAction(barAction)">Speichern</button>
-                    <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteBarAction(barAction.ActionID)">Loeschen</button>
-                </div>
-            </div>
-        }
-    </article>
 </section>
 
 @code {
     private List<Advertisement> advertisements = new();
-    private List<BarMenuItem> menuItems = new();
-    private List<BarAction> barActions = new();
 
     private Advertisement newAd = new()
     {
         Title = string.Empty,
         ImagePath = string.Empty,
         DurationSeconds = 12,
-        IsActive = true
-    };
-
-    private BarMenuItem newMenuItem = new()
-    {
-        Title = string.Empty,
-        Description = string.Empty,
-        IsActive = true
-    };
-
-    private BarAction newBarAction = new()
-    {
-        Title = string.Empty,
-        Details = string.Empty,
-        StartsAt = DateTime.Now,
-        EndsAt = DateTime.Now.AddHours(2),
         IsActive = true
     };
 
@@ -186,8 +85,6 @@
     private void ReloadData()
     {
         advertisements = uow.DisplayRepo.GetAdvertisements();
-        menuItems = uow.DisplayRepo.GetMenuItems();
-        barActions = uow.DisplayRepo.GetBarActions();
     }
 
     private void OnFileSelected(InputFileChangeEventArgs e)
@@ -270,71 +167,6 @@
         }
 
         uow.DisplayRepo.DeleteAdvertisement(ad.AdID);
-        ReloadData();
-    }
-
-    private void AddMenuItem()
-    {
-        if (string.IsNullOrWhiteSpace(newMenuItem.Title))
-        {
-            return;
-        }
-
-        uow.DisplayRepo.AddMenuItem(newMenuItem);
-        newMenuItem = new BarMenuItem
-        {
-            Title = string.Empty,
-            Description = string.Empty,
-            IsActive = true
-        };
-        ReloadData();
-    }
-
-    private void SaveMenuItem(BarMenuItem menuItem)
-    {
-        uow.DisplayRepo.UpdateMenuItem(menuItem);
-        ReloadData();
-    }
-
-    private void DeleteMenuItem(int menuItemId)
-    {
-        uow.DisplayRepo.DeleteMenuItem(menuItemId);
-        ReloadData();
-    }
-
-    private void AddBarAction()
-    {
-        if (string.IsNullOrWhiteSpace(newBarAction.Title) || newBarAction.EndsAt <= newBarAction.StartsAt)
-        {
-            return;
-        }
-
-        uow.DisplayRepo.AddBarAction(newBarAction);
-        newBarAction = new BarAction
-        {
-            Title = string.Empty,
-            Details = string.Empty,
-            StartsAt = DateTime.Now,
-            EndsAt = DateTime.Now.AddHours(2),
-            IsActive = true
-        };
-        ReloadData();
-    }
-
-    private void SaveBarAction(BarAction barAction)
-    {
-        if (barAction.EndsAt <= barAction.StartsAt)
-        {
-            return;
-        }
-
-        uow.DisplayRepo.UpdateBarAction(barAction);
-        ReloadData();
-    }
-
-    private void DeleteBarAction(int actionId)
-    {
-        uow.DisplayRepo.DeleteBarAction(actionId);
         ReloadData();
     }
 }
