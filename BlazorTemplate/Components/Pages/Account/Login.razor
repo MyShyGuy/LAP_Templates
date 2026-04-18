@@ -8,7 +8,6 @@
 @inject NavigationManager NavigationManager;
 @inject AuthenticationStateProvider AuthStateProvider;
 @inject BLDAL.UnitOfWork uow;
-@inject IHttpContextAccessor HttpContextAccessor;  
 @attribute [AllowAnonymous]
 
 <div class="row">
@@ -67,6 +66,9 @@
 </style>
 
 @code {
+    [CascadingParameter]
+    public HttpContext? HttpContext { get; set; }
+
     [SupplyParameterFromForm]
     public LoginDTO LoginVM { get; set; } = new();
 
@@ -84,19 +86,26 @@
             }
 
             // 🔹 IP-Adresse holen
-            var ip = HttpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+            var ip = HttpContext?.Connection?.RemoteIpAddress?.ToString();
+            var roleName = userAccount.Roles?.FirstOrDefault()?.RoleName ?? "Guest";
 
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, userAccount.UserName),
-                new Claim(ClaimTypes.Role, userAccount.Roles?.FirstOrDefault()?.RoleName),
+                new Claim(ClaimTypes.Role, roleName),
                 new Claim("ip", ip ?? "unknown") // 🔹 IP als Claim hinzufügen
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
-            await HttpContextAccessor.HttpContext.SignInAsync(
+            if (HttpContext == null)
+            {
+                ErrorMessage = "Login-Kontext fehlt. Bitte Seite neu laden und erneut versuchen.";
+                return;
+            }
+
+            await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 principal
             );

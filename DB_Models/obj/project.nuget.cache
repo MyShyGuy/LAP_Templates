@@ -1,20 +1,20 @@
 {
   "version": 2,
-  "dgSpecHash": "35xMaC4h5rw=",
+  "dgSpecHash": "/49PgUZmGE0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\matthias.schober\\OneDrive - uat.at\\Dokumente\\Mycode\\KööWebsite\\LAP_Templates\\DB_Models\\DB_Models.csproj",
+  "projectFilePath": "/home/admin/Dokumente/köö/LAP_Templates/DB_Models/DB_Models.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.entityframeworkcore\\10.0.6\\microsoft.entityframeworkcore.10.0.6.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\10.0.6\\microsoft.entityframeworkcore.abstractions.10.0.6.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\10.0.6\\microsoft.entityframeworkcore.analyzers.10.0.6.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\10.0.6\\microsoft.extensions.caching.abstractions.10.0.6.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.extensions.caching.memory\\10.0.6\\microsoft.extensions.caching.memory.10.0.6.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\10.0.6\\microsoft.extensions.dependencyinjection.10.0.6.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.6\\microsoft.extensions.dependencyinjection.abstractions.10.0.6.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.extensions.logging\\10.0.6\\microsoft.extensions.logging.10.0.6.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\10.0.6\\microsoft.extensions.logging.abstractions.10.0.6.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.extensions.options\\10.0.6\\microsoft.extensions.options.10.0.6.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.6\\microsoft.extensions.primitives.10.0.6.nupkg.sha512"
+    "/home/admin/.nuget/packages/microsoft.entityframeworkcore/10.0.6/microsoft.entityframeworkcore.10.0.6.nupkg.sha512",
+    "/home/admin/.nuget/packages/microsoft.entityframeworkcore.abstractions/10.0.6/microsoft.entityframeworkcore.abstractions.10.0.6.nupkg.sha512",
+    "/home/admin/.nuget/packages/microsoft.entityframeworkcore.analyzers/10.0.6/microsoft.entityframeworkcore.analyzers.10.0.6.nupkg.sha512",
+    "/home/admin/.nuget/packages/microsoft.extensions.caching.abstractions/10.0.6/microsoft.extensions.caching.abstractions.10.0.6.nupkg.sha512",
+    "/home/admin/.nuget/packages/microsoft.extensions.caching.memory/10.0.6/microsoft.extensions.caching.memory.10.0.6.nupkg.sha512",
+    "/home/admin/.nuget/packages/microsoft.extensions.dependencyinjection/10.0.6/microsoft.extensions.dependencyinjection.10.0.6.nupkg.sha512",
+    "/home/admin/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/10.0.6/microsoft.extensions.dependencyinjection.abstractions.10.0.6.nupkg.sha512",
+    "/home/admin/.nuget/packages/microsoft.extensions.logging/10.0.6/microsoft.extensions.logging.10.0.6.nupkg.sha512",
+    "/home/admin/.nuget/packages/microsoft.extensions.logging.abstractions/10.0.6/microsoft.extensions.logging.abstractions.10.0.6.nupkg.sha512",
+    "/home/admin/.nuget/packages/microsoft.extensions.options/10.0.6/microsoft.extensions.options.10.0.6.nupkg.sha512",
+    "/home/admin/.nuget/packages/microsoft.extensions.primitives/10.0.6/microsoft.extensions.primitives.10.0.6.nupkg.sha512"
   ],
   "logs": []
 }

@@ -11,6 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 var dbDirectory = Path.Combine(builder.Environment.ContentRootPath, "data");
 Directory.CreateDirectory(dbDirectory);
 
+var configuredConnectionString = builder.Configuration.GetConnectionString("MyDatabase");
+var defaultDbPath = Path.Combine(dbDirectory, "koowebsite.db");
+var connectionString = string.IsNullOrWhiteSpace(configuredConnectionString) ||
+                       configuredConnectionString.Contains(":memory:", StringComparison.OrdinalIgnoreCase)
+    ? $"Data Source={defaultDbPath}"
+    : configuredConnectionString;
+
 builder.Services.AddLogging(logging =>
 {
     logging.ClearProviders(); // alte Provider entfernen
@@ -40,7 +47,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 // DbContextFactory registrieren -- added
 builder.Services.AddDbContextFactory<AppDBContext>(options =>
 {
-    options.UseSqlite(builder.Configuration.GetConnectionString("MyDatabase"), sqliteOptions =>
+    options.UseSqlite(connectionString, sqliteOptions =>
     {
         sqliteOptions.CommandTimeout(30);
     });
@@ -87,7 +94,7 @@ app.Run();
 static async Task SeedAdminUserAsync(IServiceProvider services)
 {
     const string adminUserName = "admin";
-    const string adminPassword = "Rofl777";
+    const string adminPassword = "Rofl0815";
     const string adminRoleName = "Admin";
 
     using var scope = services.CreateScope();
@@ -112,9 +119,10 @@ static async Task SeedAdminUserAsync(IServiceProvider services)
         .Include(u => u.Roles)
         .FirstOrDefaultAsync(u => u.UserName == adminUserName);
 
+    var passwordService = new PasswordService();
+
     if (existingAdmin == null)
     {
-        var passwordService = new PasswordService();
         var userId = Guid.NewGuid().ToString();
         var passwordHash = passwordService.ComputeHash(adminPassword, userId);
 
@@ -130,6 +138,13 @@ static async Task SeedAdminUserAsync(IServiceProvider services)
         dbContext.Users.Add(adminUser);
         await dbContext.SaveChangesAsync();
         return;
+    }
+
+    var expectedHash = passwordService.ComputeHash(adminPassword, existingAdmin.UserID);
+    if (!string.Equals(existingAdmin.PasswordHash, expectedHash, StringComparison.Ordinal))
+    {
+        existingAdmin.PasswordHash = expectedHash;
+        await dbContext.SaveChangesAsync();
     }
 
     if (!existingAdmin.Roles.Any(r => r.RoleName == adminRoleName))
