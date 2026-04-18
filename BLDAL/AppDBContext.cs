@@ -11,6 +11,7 @@ namespace BLDAL
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<TodoItem> Todos { get; set; } = null!;
+        public virtual DbSet<MatchMember> MatchMembers { get; set; } = null!;
 
 
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -82,10 +83,6 @@ namespace BLDAL
                     RoleName = "Guest",
                     Notes = "Nur Lese Zugriff"
                 });
-
-            modelBuilder.Entity<Movie>()
-                .Property(m => m.Price)
-                .HasPrecision(10, 4);
         }
     }
 }

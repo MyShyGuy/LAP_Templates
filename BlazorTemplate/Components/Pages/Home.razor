@@ -1,7 +1,10 @@
 ﻿@page "/"
 @using DB_Models.DTO
 @using Microsoft.AspNetCore.Components.Forms
+@using System.Runtime.InteropServices
 @inject BLDAL.UnitOfWork uow
+@inject NavigationManager NavigationManager;
+@attribute [AllowAnonymous]
 
 <PageTitle>Home</PageTitle>
 <div class="full-background">
@@ -19,71 +22,61 @@
             Jetzt anmelden!
         </p>
 
-        <EditForm EditContext="@editContext" OnValidSubmit="HandleSubmit">
+        <EditForm Model="@anmeldungVM" OnValidSubmit="HandleSubmit" FormName="MatchForm">
             <DataAnnotationsValidator />
-            <ValidationSummary />
 
             <div class="form-group">
                 <label for="name">Name</label>
-                <InputText id="name" class="form-control" @bind-Value="anmeldung.Name" />
-                <ValidationMessage For="() => anmeldung.Name" />
+                <InputText id="name" class="form-control" @bind-Value="anmeldungVM.Name" />
+                <ValidationMessage For="() => anmeldungVM.Name" />
             </div>
 
             <div class="form-group">
                 <label for="email">E-Mail</label>
-                <InputText id="email" class="form-control" @bind-Value="anmeldung.Email" />
-                <ValidationMessage For="() => anmeldung.Email" />
+                <InputText id="email" class="form-control" @bind-Value="anmeldungVM.Email" />
+                <ValidationMessage For="() => anmeldungVM.Email" />
             </div>
 
             <div class="form-group">
                 <label for="phone">Telefon</label>
-                <InputText id="phone" class="form-control" @bind-Value="anmeldung.PhoneNumber" />
-                <ValidationMessage For="() => anmeldung.PhoneNumber" />
+                <InputText id="phone" class="form-control" @bind-Value="anmeldungVM.PhoneNumber" />
+                <ValidationMessage For="() => anmeldungVM.PhoneNumber" />
             </div>
 
             <button type="submit" class="form-button">
                 Jetzt anmelden
             </button>
-
         </EditForm>
-
     </div>
-
 </div>
 
 </div>
 
 @code {
-    private TRegisterDTO anmeldung = new();
-    private EditContext editContext;
+    [SupplyParameterFromForm]
+    private TRegisterDTO anmeldungVM { get; set; } = new TRegisterDTO();
 
-    protected override void OnInitialized()
+private async Task HandleSubmit()
+{
+    try
     {
-        editContext = new EditContext(anmeldung);
-    }
+        var success = await uow.TRegisterRepo.RegisterMemberAsync(anmeldungVM);
 
-    private async Task HandleSubmit()
+        if (success)
+        {
+            Console.WriteLine("Anmeldung erfolgreich!");
+            
+        }
+        else       
+         Console.WriteLine("Anmeldung fehlgeschlagen.");
+
+
+    }
+    catch (Exception ex)
     {
-        Console.WriteLine($"Anmeldung: {anmeldung.Name}");
-
-        try
-        {
-            // Persist the registration using UnitOfWork
-            // Example (implement a proper repo and method first):
-            // uow.RegistrationRepo.Add(new Registration { Name = anmeldung.Name, Email = anmeldung.Email, Phone = anmeldung.PhoneNumber });
-            // uow.Commit();
-
-            // If you don't have a RegistrationRepo yet, add one in BLDAL and expose it via UnitOfWork,
-            // similar to how Userrepo, TodoRepo or RankingRepo are exposed.
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error saving registration: {ex.Message}");
-        }
-
-        // Reset form + validation state
-        anmeldung = new TRegisterDTO();
-        editContext = new EditContext(anmeldung);
-        await InvokeAsync(StateHasChanged);
+        Console.WriteLine(ex.Message);
     }
+    NavigationManager.NavigateTo("/thanks");
+}
+
 }
