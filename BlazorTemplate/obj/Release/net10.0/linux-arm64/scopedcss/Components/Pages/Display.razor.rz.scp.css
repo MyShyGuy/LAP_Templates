@@ -1,0 +1,34 @@
+.display-shell[b-ajmux4vcjg] {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    overflow: clip;
+    background: #000;
+}
+
+.ad-stage[b-ajmux4vcjg] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100dvh;
+    overflow: clip;
+}
+
+.ad-stage img[b-ajmux4vcjg] {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center center;
+}
+
+.empty-state[b-ajmux4vcjg] {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    color: #fff;
+    background: #000;
+}

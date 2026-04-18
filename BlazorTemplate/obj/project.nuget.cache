@@ -1,11 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "CAU5DbwKqvU=",
+  "dgSpecHash": "tq3FrPTva70=",
   "success": true,
   "projectFilePath": "C:\\Users\\matthias.schober\\OneDrive - uat.at\\Dokumente\\Mycode\\KööWebsite\\LAP_Templates\\BlazorTemplate\\BlazorTemplate.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\csvhelper\\33.1.0\\csvhelper.33.1.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
@@ -62,8 +60,6 @@
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.aspnetcore.components.quickgrid.entityframeworkadapter\\10.0.0\\microsoft.aspnetcore.components.quickgrid.entityframeworkadapter.10.0.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.aspnetcore.diagnostics.entityframeworkcore\\10.0.0\\microsoft.aspnetcore.diagnostics.entityframeworkcore.10.0.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.aspnetcore.razor.language\\6.0.24\\microsoft.aspnetcore.razor.language.6.0.24.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\8.0.0\\microsoft.bcl.asyncinterfaces.8.0.0.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.bcl.cryptography\\9.0.4\\microsoft.bcl.cryptography.9.0.4.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.build\\17.11.48\\microsoft.build.17.11.48.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.build.framework\\18.0.2\\microsoft.build.framework.18.0.2.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.build.tasks.core\\17.14.28\\microsoft.build.tasks.core.17.14.28.nupkg.sha512",
@@ -80,8 +76,7 @@
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.codeanalysis.scripting.common\\4.14.0\\microsoft.codeanalysis.scripting.common.4.14.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.codeanalysis.workspaces.common\\5.0.0\\microsoft.codeanalysis.workspaces.common.5.0.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.codeanalysis.workspaces.msbuild\\5.0.0\\microsoft.codeanalysis.workspaces.msbuild.5.0.0.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.data.sqlclient\\6.1.1\\microsoft.data.sqlclient.6.1.1.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\6.0.2\\microsoft.data.sqlclient.sni.runtime.6.0.2.nupkg.sha512",
+    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.data.sqlite.core\\10.0.6\\microsoft.data.sqlite.core.10.0.6.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.diasymreader\\2.0.0\\microsoft.diasymreader.2.0.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.dotnet.scaffolding.shared\\10.0.0\\microsoft.dotnet.scaffolding.shared.10.0.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.entityframeworkcore\\10.0.6\\microsoft.entityframeworkcore.10.0.6.nupkg.sha512",
@@ -89,19 +84,11 @@
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\10.0.6\\microsoft.entityframeworkcore.analyzers.10.0.6.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.entityframeworkcore.design\\10.0.6\\microsoft.entityframeworkcore.design.10.0.6.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\10.0.6\\microsoft.entityframeworkcore.relational.10.0.6.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\10.0.6\\microsoft.entityframeworkcore.sqlserver.10.0.6.nupkg.sha512",
+    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.entityframeworkcore.sqlite\\10.0.6\\microsoft.entityframeworkcore.sqlite.10.0.6.nupkg.sha512",
+    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.entityframeworkcore.sqlite.core\\10.0.6\\microsoft.entityframeworkcore.sqlite.core.10.0.6.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\10.0.6\\microsoft.entityframeworkcore.tools.10.0.6.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.extensions.dependencymodel\\10.0.6\\microsoft.extensions.dependencymodel.10.0.6.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.identity.client\\4.73.1\\microsoft.identity.client.4.73.1.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.identity.client.extensions.msal\\4.73.1\\microsoft.identity.client.extensions.msal.4.73.1.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.identitymodel.abstractions\\7.7.1\\microsoft.identitymodel.abstractions.7.7.1.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\7.7.1\\microsoft.identitymodel.jsonwebtokens.7.7.1.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.identitymodel.logging\\7.7.1\\microsoft.identitymodel.logging.7.7.1.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.identitymodel.protocols\\7.7.1\\microsoft.identitymodel.protocols.7.7.1.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\7.7.1\\microsoft.identitymodel.protocols.openidconnect.7.7.1.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.identitymodel.tokens\\7.7.1\\microsoft.identitymodel.tokens.7.7.1.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.net.stringtools\\17.14.28\\microsoft.net.stringtools.17.14.28.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.visualstudio.solutionpersistence\\1.0.52\\microsoft.visualstudio.solutionpersistence.1.0.52.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration\\10.0.0\\microsoft.visualstudio.web.codegeneration.10.0.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.core\\10.0.0\\microsoft.visualstudio.web.codegeneration.core.10.0.0.nupkg.sha512",
@@ -121,7 +108,10 @@
     "C:\\Users\\matthias.schober\\.nuget\\packages\\nuget.projectmodel\\6.12.1\\nuget.projectmodel.6.12.1.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\nuget.protocol\\6.12.1\\nuget.protocol.6.12.1.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\nuget.versioning\\6.12.1\\nuget.versioning.6.12.1.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\system.clientmodel\\1.5.1\\system.clientmodel.1.5.1.nupkg.sha512",
+    "C:\\Users\\matthias.schober\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.11\\sqlitepclraw.bundle_e_sqlite3.2.1.11.nupkg.sha512",
+    "C:\\Users\\matthias.schober\\.nuget\\packages\\sqlitepclraw.core\\2.1.11\\sqlitepclraw.core.2.1.11.nupkg.sha512",
+    "C:\\Users\\matthias.schober\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.11\\sqlitepclraw.lib.e_sqlite3.2.1.11.nupkg.sha512",
+    "C:\\Users\\matthias.schober\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.11\\sqlitepclraw.provider.e_sqlite3.2.1.11.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\system.codedom\\9.0.0\\system.codedom.9.0.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\system.composition\\9.0.0\\system.composition.9.0.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\system.composition.attributedmodel\\9.0.0\\system.composition.attributedmodel.9.0.0.nupkg.sha512",
@@ -129,16 +119,15 @@
     "C:\\Users\\matthias.schober\\.nuget\\packages\\system.composition.hosting\\9.0.0\\system.composition.hosting.9.0.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\system.composition.runtime\\9.0.0\\system.composition.runtime.9.0.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\system.composition.typedparts\\9.0.0\\system.composition.typedparts.9.0.0.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\system.configuration.configurationmanager\\9.0.4\\system.configuration.configurationmanager.9.0.4.nupkg.sha512",
+    "C:\\Users\\matthias.schober\\.nuget\\packages\\system.configuration.configurationmanager\\9.0.0\\system.configuration.configurationmanager.9.0.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\system.data.datasetextensions\\4.5.0\\system.data.datasetextensions.4.5.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\system.formats.nrbf\\9.0.0\\system.formats.nrbf.9.0.0.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\system.identitymodel.tokens.jwt\\7.7.1\\system.identitymodel.tokens.jwt.7.7.1.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\system.memory.data\\8.0.1\\system.memory.data.8.0.1.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\system.reflection.metadataloadcontext\\8.0.0\\system.reflection.metadataloadcontext.8.0.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\system.resources.extensions\\9.0.0\\system.resources.extensions.9.0.0.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\system.security.cryptography.pkcs\\9.0.4\\system.security.cryptography.pkcs.9.0.4.nupkg.sha512",
+    "C:\\Users\\matthias.schober\\.nuget\\packages\\system.security.cryptography.pkcs\\9.0.0\\system.security.cryptography.pkcs.9.0.0.nupkg.sha512",
     "C:\\Users\\matthias.schober\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.6\\system.security.cryptography.protecteddata.9.0.6.nupkg.sha512",
-    "C:\\Users\\matthias.schober\\.nuget\\packages\\telegram.bot\\22.9.5.2\\telegram.bot.22.9.5.2.nupkg.sha512"
+    "C:\\Users\\matthias.schober\\.nuget\\packages\\telegram.bot\\22.9.5.2\\telegram.bot.22.9.5.2.nupkg.sha512",
+    "C:\\Users\\matthias.schober\\.nuget\\packages\\microsoft.netcore.app.host.linux-arm64\\10.0.6\\microsoft.netcore.app.host.linux-arm64.10.0.6.nupkg.sha512"
   ],
   "logs": [
     {
@@ -150,7 +139,8 @@
       "filePath": "C:\\Users\\matthias.schober\\OneDrive - uat.at\\Dokumente\\Mycode\\KööWebsite\\LAP_Templates\\BlazorTemplate\\BlazorTemplate.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Common",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -162,7 +152,8 @@
       "filePath": "C:\\Users\\matthias.schober\\OneDrive - uat.at\\Dokumente\\Mycode\\KööWebsite\\LAP_Templates\\BlazorTemplate\\BlazorTemplate.csproj",
       "libraryId": "Microsoft.CodeAnalysis.CSharp",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -174,7 +165,8 @@
       "filePath": "C:\\Users\\matthias.schober\\OneDrive - uat.at\\Dokumente\\Mycode\\KööWebsite\\LAP_Templates\\BlazorTemplate\\BlazorTemplate.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Workspaces.Common",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -186,7 +178,8 @@
       "filePath": "C:\\Users\\matthias.schober\\OneDrive - uat.at\\Dokumente\\Mycode\\KööWebsite\\LAP_Templates\\BlazorTemplate\\BlazorTemplate.csproj",
       "libraryId": "Microsoft.CodeAnalysis.CSharp.Workspaces",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -198,7 +191,8 @@
       "filePath": "C:\\Users\\matthias.schober\\OneDrive - uat.at\\Dokumente\\Mycode\\KööWebsite\\LAP_Templates\\BlazorTemplate\\BlazorTemplate.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Common",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -210,7 +204,8 @@
       "filePath": "C:\\Users\\matthias.schober\\OneDrive - uat.at\\Dokumente\\Mycode\\KööWebsite\\LAP_Templates\\BlazorTemplate\\BlazorTemplate.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Workspaces.Common",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -222,7 +217,8 @@
       "filePath": "C:\\Users\\matthias.schober\\OneDrive - uat.at\\Dokumente\\Mycode\\KööWebsite\\LAP_Templates\\BlazorTemplate\\BlazorTemplate.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Common",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -234,7 +230,8 @@
       "filePath": "C:\\Users\\matthias.schober\\OneDrive - uat.at\\Dokumente\\Mycode\\KööWebsite\\LAP_Templates\\BlazorTemplate\\BlazorTemplate.csproj",
       "libraryId": "NuGet.Packaging",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -246,7 +243,8 @@
       "filePath": "C:\\Users\\matthias.schober\\OneDrive - uat.at\\Dokumente\\Mycode\\KööWebsite\\LAP_Templates\\BlazorTemplate\\BlazorTemplate.csproj",
       "libraryId": "NuGet.Protocol",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     }
   ]

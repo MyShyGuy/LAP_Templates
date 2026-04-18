@@ -4,7 +4,7 @@ using System.Data;
 
 namespace DB_Models.Models
 {
-    [Table("Todos", Schema = "usr")]
+    [Table("Todos")]
     public class TodoItem
     {
         [Key]

@@ -1,9 +1,15 @@
 ﻿using BlazorTemplate.Components;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using BLDAL;
+using DB_Models.Models;
+using DB_Models.Services;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var dbDirectory = Path.Combine(builder.Environment.ContentRootPath, "data");
+Directory.CreateDirectory(dbDirectory);
 
 builder.Services.AddLogging(logging =>
 {
@@ -34,7 +40,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 // DbContextFactory registrieren -- added
 builder.Services.AddDbContextFactory<AppDBContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MyDatabase"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("MyDatabase"), sqliteOptions =>
+    {
+        sqliteOptions.CommandTimeout(30);
+    });
 });
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();
@@ -49,6 +58,8 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<BLDAL.UnitOfWork>();
 
 var app = builder.Build();
+
+await SeedAdminUserAsync(app.Services);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -72,3 +83,58 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.Run();
+
+static async Task SeedAdminUserAsync(IServiceProvider services)
+{
+    const string adminUserName = "admin";
+    const string adminPassword = "Rofl777";
+    const string adminRoleName = "Admin";
+
+    using var scope = services.CreateScope();
+    var dbFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDBContext>>();
+    await using var dbContext = await dbFactory.CreateDbContextAsync();
+
+    await dbContext.Database.MigrateAsync();
+
+    var adminRole = await dbContext.Roles.FirstOrDefaultAsync(r => r.RoleName == adminRoleName);
+    if (adminRole == null)
+    {
+        adminRole = new Role
+        {
+            RoleName = adminRoleName,
+            Notes = "Hat volle Zugriffsrechte"
+        };
+        dbContext.Roles.Add(adminRole);
+        await dbContext.SaveChangesAsync();
+    }
+
+    var existingAdmin = await dbContext.Users
+        .Include(u => u.Roles)
+        .FirstOrDefaultAsync(u => u.UserName == adminUserName);
+
+    if (existingAdmin == null)
+    {
+        var passwordService = new PasswordService();
+        var userId = Guid.NewGuid().ToString();
+        var passwordHash = passwordService.ComputeHash(adminPassword, userId);
+
+        var adminUser = new User
+        {
+            UserID = userId,
+            UserName = adminUserName,
+            PasswordHash = passwordHash,
+            EntryDate = DateTime.Now,
+            Roles = new List<Role> { adminRole }
+        };
+
+        dbContext.Users.Add(adminUser);
+        await dbContext.SaveChangesAsync();
+        return;
+    }
+
+    if (!existingAdmin.Roles.Any(r => r.RoleName == adminRoleName))
+    {
+        existingAdmin.Roles.Add(adminRole);
+        await dbContext.SaveChangesAsync();
+    }
+}

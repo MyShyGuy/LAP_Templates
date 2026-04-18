@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DB_Models.Models
 {
-    [Table("MatchMembers", Schema = "match")]
+    [Table("MatchMembers")]
     public class MatchMember
     {
         [Key]

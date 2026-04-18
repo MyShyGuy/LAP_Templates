@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DB_Models.Models
 {
-    [Table("Roles", Schema = "usr")]
+    [Table("Roles")]
     public class Role
     {
         [Key]

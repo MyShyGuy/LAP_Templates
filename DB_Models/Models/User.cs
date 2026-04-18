@@ -4,7 +4,7 @@ using System.Data;
 
 namespace DB_Models.Models
 {
-    [Table("Users", Schema = "usr")]
+    [Table("Users")]
     public class User
     {
         public User() { }

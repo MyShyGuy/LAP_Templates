@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DB_Models.Models
 {
-    [Table("BarMenuItems", Schema = "disp")]
+    [Table("BarMenuItems")]
     public class BarMenuItem
     {
         [Key]
