@@ -6,16 +6,16 @@
 
 main {
     flex: 1;
-    background-color: #0c024e;
+    background-color: var(--pool-green-900);
 }
 
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(0, 0, 0) 0%, #0c024e 70%);
+    background-image: linear-gradient(180deg, #031d18 0%, var(--pool-green-900) 70%);
 }
 
 .top-row {
-    background-color: #0c024e;
-    border-bottom: 1px solid black;
+    background-color: rgba(3, 29, 24, 0.96);
+    border-bottom: 1px solid rgba(228, 220, 196, 0.2);
     justify-content: flex-end;
     height: 3.5rem;
     display: flex;
@@ -29,7 +29,8 @@ main {
     justify-content: center;   /* horizontal zentrieren */
     align-items: center;       /* vertikal zentrieren */
     padding-bottom: 4px;
-    border: 1px solid black;
+    color: var(--pool-cream-100);
+    border: 1px solid rgba(228, 220, 196, 0.25);
     border-radius: 5px;
     padding: 0 1rem;           /* optional: Abstand links/rechts */
     height: 100%;              /* volle Höhe der Top-Row */
@@ -43,7 +44,8 @@ main {
 }
 
 .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    background: rgba(228, 220, 196, 0.09);
 }
 
 .top-row ::deep a:first-child {

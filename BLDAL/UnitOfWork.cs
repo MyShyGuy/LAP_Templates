@@ -14,6 +14,7 @@ namespace BLDAL
         private UserRepo _usrRepo;
         private TodoRepo _todoRepo;
         private TRegisterRepo _TRegisterRepo;
+        private DisplayRepo _displayRepo;
         public UnitOfWork(AppDBContext context)
         {
             dbc = context;
@@ -22,6 +23,7 @@ namespace BLDAL
         public UserRepo Userrepo => _usrRepo ??= new UserRepo(dbc);
         public TodoRepo TodoRepo => _todoRepo ??= new TodoRepo(dbc);
         public TRegisterRepo TRegisterRepo => _TRegisterRepo ??= new TRegisterRepo(dbc);
+        public DisplayRepo DisplayRepo => _displayRepo ??= new DisplayRepo(dbc);
 
         public int Commit()
         {

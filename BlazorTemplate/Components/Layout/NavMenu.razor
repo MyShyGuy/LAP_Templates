@@ -15,6 +15,18 @@
             </NavLink>
         </div>
 
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="turnier-anmeldung">
+                <span class="bi bi-trophy-nav-menu" aria-hidden="true"></span> Turnier Registrierung
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="display">
+                <span class="bi bi-display-nav-menu" aria-hidden="true"></span> Anzeige
+            </NavLink>
+        </div>
+
         <AuthorizeView Roles="Admin">
             <Authorized>
                 <div class="nav-item px-3">
@@ -30,6 +42,12 @@
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="todo">
                         <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> ToDo
+                    </NavLink>
+                </div>
+
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="admin-display">
+                        <span class="bi bi-gear-nav-menu" aria-hidden="true"></span> Display Admin
                     </NavLink>
                 </div>
             </Authorized>

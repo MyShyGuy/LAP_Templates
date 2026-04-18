@@ -12,6 +12,9 @@ namespace BLDAL
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<TodoItem> Todos { get; set; } = null!;
         public virtual DbSet<MatchMember> MatchMembers { get; set; } = null!;
+        public virtual DbSet<Advertisement> Advertisements { get; set; } = null!;
+        public virtual DbSet<BarMenuItem> BarMenuItems { get; set; } = null!;
+        public virtual DbSet<BarAction> BarActions { get; set; } = null!;
 
 
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -63,6 +66,15 @@ namespace BLDAL
                 .WithOne(t => t.User)
                 .HasForeignKey(t => t.UserID)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Advertisement>()
+                .HasIndex(a => a.DisplayOrder);
+
+            modelBuilder.Entity<BarMenuItem>()
+                .HasIndex(m => m.DisplayOrder);
+
+            modelBuilder.Entity<BarAction>()
+                .HasIndex(a => new { a.StartsAt, a.EndsAt });
 
             modelBuilder.Entity<Role>().HasData(
                 new Role

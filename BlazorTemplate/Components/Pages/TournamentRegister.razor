@@ -1,0 +1,68 @@
+@page "/turnier-anmeldung"
+@using DB_Models.DTO
+@using Microsoft.AspNetCore.Components.Forms
+@inject BLDAL.UnitOfWork uow
+@inject NavigationManager NavigationManager
+@attribute [AllowAnonymous]
+
+<PageTitle>Turnier Anmeldung</PageTitle>
+
+<section class="register-shell">
+    <div class="register-card">
+        <h1>Turnier Anmeldung</h1>
+        <p class="register-intro">
+            Melde dich fuer das kommende Turnier an. Wir informieren dich vor dem Event
+            ueber Telegram zu Startzeiten und Updates.
+        </p>
+
+        <EditForm Model="@anmeldungVM" OnValidSubmit="HandleSubmit" FormName="MatchForm">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <label for="name">Name</label>
+                <InputText id="name" class="form-control" @bind-Value="anmeldungVM.Name" />
+                <ValidationMessage For="() => anmeldungVM.Name" />
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-Mail</label>
+                <InputText id="email" class="form-control" @bind-Value="anmeldungVM.Email" />
+                <ValidationMessage For="() => anmeldungVM.Email" />
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Telefon</label>
+                <InputText id="phone" class="form-control" @bind-Value="anmeldungVM.PhoneNumber" />
+                <ValidationMessage For="() => anmeldungVM.PhoneNumber" />
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Jetzt anmelden
+            </button>
+        </EditForm>
+    </div>
+</section>
+
+@code {
+    [SupplyParameterFromForm]
+    private TRegisterDTO anmeldungVM { get; set; } = new();
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            var success = await uow.TRegisterRepo.RegisterMemberAsync(anmeldungVM);
+
+            if (!success)
+            {
+                return;
+            }
+
+            NavigationManager.NavigateTo("/thanks");
+        }
+        catch
+        {
+            // Error display can be expanded with a dedicated message box.
+        }
+    }
+}

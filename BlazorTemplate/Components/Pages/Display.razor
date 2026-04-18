@@ -1,0 +1,102 @@
+@page "/display"
+@rendermode InteractiveServer
+@implements IDisposable
+@using DB_Models.Models
+@inject BLDAL.UnitOfWork uow
+@attribute [AllowAnonymous]
+@layout Layout.DisplayLayout
+
+<PageTitle>Display</PageTitle>
+
+<section class="display-shell">
+    @if (ads.Count == 0)
+    {
+        <div class="empty-state">
+            <h2>Keine aktiven Werbebilder</h2>
+            <p>Bitte im Admin-Bereich mindestens ein aktives Bild hinterlegen.</p>
+        </div>
+    }
+    else
+    {
+        var current = ads[currentAdIndex];
+        <div class="ad-stage">
+            <img src="@current.ImagePath" alt="@current.Title" />
+        </div>
+    }
+</section>
+
+@code {
+    private List<Advertisement> ads = new();
+
+    private int currentAdIndex;
+    private CancellationTokenSource slideshowToken = new();
+    private Task? slideshowTask;
+
+    protected override Task OnInitializedAsync()
+    {
+        LoadData();
+        slideshowTask = StartSlideshowLoop();
+        return Task.CompletedTask;
+    }
+
+    private void LoadData()
+    {
+        ads = uow.DisplayRepo.GetAdvertisements(onlyActive: true);
+
+        if (currentAdIndex >= ads.Count)
+        {
+            currentAdIndex = 0;
+        }
+    }
+
+    private async Task StartSlideshowLoop()
+    {
+        var token = slideshowToken.Token;
+
+        while (!token.IsCancellationRequested)
+        {
+            var delaySeconds = ads.Count > 0
+                ? Math.Clamp(ads[currentAdIndex].DurationSeconds, 3, 300)
+                : 6;
+
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(delaySeconds), token);
+            }
+            catch (TaskCanceledException)
+            {
+                break;
+            }
+
+            if (token.IsCancellationRequested)
+            {
+                break;
+            }
+
+            LoadData();
+            if (ads.Count > 0)
+            {
+                currentAdIndex = (currentAdIndex + 1) % ads.Count;
+            }
+
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public void Dispose()
+    {
+        slideshowToken.Cancel();
+        if (slideshowTask is not null)
+        {
+            try
+            {
+                slideshowTask.Wait(500);
+            }
+            catch
+            {
+                // Cancellation is expected on dispose.
+            }
+        }
+        slideshowToken.Dispose();
+    }
+}

@@ -1,0 +1,340 @@
+@page "/admin-display"
+@rendermode InteractiveServer
+@using DB_Models.Models
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Authorization
+@inject BLDAL.UnitOfWork uow
+@inject IWebHostEnvironment Env
+@attribute [Authorize(Roles = "Admin")]
+
+<PageTitle>Display Admin</PageTitle>
+
+<section class="admin-shell">
+    <h1>Display Verwaltung</h1>
+    <p class="intro">Hier verwaltest du Werbebilder, Bar-Menue und zeitgesteuerte Aktionen.</p>
+
+    <div class="grid-layout">
+        <article class="panel">
+            <h2>Werbebilder</h2>
+            <p class="hint">Titel und Dauer pro Bild sind direkt konfigurierbar.</p>
+
+            <div class="form-block">
+                <label>Titel</label>
+                <InputText class="form-control" @bind-Value="newAd.Title" />
+
+                <label>Dauer in Sekunden</label>
+                <InputNumber class="form-control" @bind-Value="newAd.DurationSeconds" />
+
+                <label>Reihenfolge</label>
+                <InputNumber class="form-control" @bind-Value="newAd.DisplayOrder" />
+
+                <label>
+                    <InputCheckbox @bind-Value="newAd.IsActive" /> Aktiv
+                </label>
+
+                <InputFile OnChange="OnFileSelected" accept=".png,.jpg,.jpeg,.webp" />
+
+                <button class="btn btn-primary" @onclick="AddAdvertisement">Bild hochladen</button>
+                @if (!string.IsNullOrWhiteSpace(adError))
+                {
+                    <div class="error-msg">@adError</div>
+                }
+            </div>
+
+            <div class="table-wrap">
+                @foreach (var ad in advertisements)
+                {
+                    <div class="line-item">
+                        <img src="@ad.ImagePath" alt="@ad.Title" class="thumb" />
+                        <div class="line-fields">
+                            <InputText class="form-control" @bind-Value="ad.Title" />
+                            <InputNumber class="form-control" @bind-Value="ad.DurationSeconds" />
+                            <InputNumber class="form-control" @bind-Value="ad.DisplayOrder" />
+                            <label><InputCheckbox @bind-Value="ad.IsActive" /> Aktiv</label>
+                        </div>
+                        <div class="line-actions">
+                            <button class="btn btn-sm btn-primary" @onclick="() => SaveAdvertisement(ad)">Speichern</button>
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteAdvertisement(ad)">Loeschen</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </article>
+
+        <article class="panel">
+            <h2>Bar Menue</h2>
+            <div class="form-block">
+                <label>Bezeichnung</label>
+                <InputText class="form-control" @bind-Value="newMenuItem.Title" />
+
+                <label>Beschreibung</label>
+                <InputText class="form-control" @bind-Value="newMenuItem.Description" />
+
+                <label>Preis</label>
+                <InputNumber class="form-control" @bind-Value="newMenuItem.Price" />
+
+                <label>Reihenfolge</label>
+                <InputNumber class="form-control" @bind-Value="newMenuItem.DisplayOrder" />
+
+                <label><InputCheckbox @bind-Value="newMenuItem.IsActive" /> Aktiv</label>
+                <button class="btn btn-primary" @onclick="AddMenuItem">Menuepunkt anlegen</button>
+            </div>
+
+            @foreach (var menuItem in menuItems)
+            {
+                <div class="line-item compact">
+                    <div class="line-fields">
+                        <InputText class="form-control" @bind-Value="menuItem.Title" />
+                        <InputText class="form-control" @bind-Value="menuItem.Description" />
+                        <InputNumber class="form-control" @bind-Value="menuItem.Price" />
+                        <InputNumber class="form-control" @bind-Value="menuItem.DisplayOrder" />
+                        <label><InputCheckbox @bind-Value="menuItem.IsActive" /> Aktiv</label>
+                    </div>
+                    <div class="line-actions">
+                        <button class="btn btn-sm btn-primary" @onclick="() => SaveMenuItem(menuItem)">Speichern</button>
+                        <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteMenuItem(menuItem.MenuItemID)">Loeschen</button>
+                    </div>
+                </div>
+            }
+        </article>
+    </div>
+
+    <article class="panel full-width">
+        <h2>Bar Aktionen (Datum/Uhrzeit von-bis)</h2>
+
+        <div class="form-block action-grid">
+            <div>
+                <label>Titel</label>
+                <InputText class="form-control" @bind-Value="newBarAction.Title" />
+            </div>
+            <div>
+                <label>Details</label>
+                <InputText class="form-control" @bind-Value="newBarAction.Details" />
+            </div>
+            <div>
+                <label>Von</label>
+                <InputDate class="form-control" @bind-Value="newBarAction.StartsAt" Type="InputDateType.DateTimeLocal" />
+            </div>
+            <div>
+                <label>Bis</label>
+                <InputDate class="form-control" @bind-Value="newBarAction.EndsAt" Type="InputDateType.DateTimeLocal" />
+            </div>
+            <div>
+                <label><InputCheckbox @bind-Value="newBarAction.IsActive" /> Aktiv</label>
+            </div>
+            <div>
+                <button class="btn btn-primary" @onclick="AddBarAction">Aktion anlegen</button>
+            </div>
+        </div>
+
+        @foreach (var barAction in barActions)
+        {
+            <div class="line-item compact">
+                <div class="line-fields action-grid">
+                    <InputText class="form-control" @bind-Value="barAction.Title" />
+                    <InputText class="form-control" @bind-Value="barAction.Details" />
+                    <InputDate class="form-control" @bind-Value="barAction.StartsAt" Type="InputDateType.DateTimeLocal" />
+                    <InputDate class="form-control" @bind-Value="barAction.EndsAt" Type="InputDateType.DateTimeLocal" />
+                    <label><InputCheckbox @bind-Value="barAction.IsActive" /> Aktiv</label>
+                </div>
+                <div class="line-actions">
+                    <button class="btn btn-sm btn-primary" @onclick="() => SaveBarAction(barAction)">Speichern</button>
+                    <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteBarAction(barAction.ActionID)">Loeschen</button>
+                </div>
+            </div>
+        }
+    </article>
+</section>
+
+@code {
+    private List<Advertisement> advertisements = new();
+    private List<BarMenuItem> menuItems = new();
+    private List<BarAction> barActions = new();
+
+    private Advertisement newAd = new()
+    {
+        Title = string.Empty,
+        ImagePath = string.Empty,
+        DurationSeconds = 12,
+        IsActive = true
+    };
+
+    private BarMenuItem newMenuItem = new()
+    {
+        Title = string.Empty,
+        Description = string.Empty,
+        IsActive = true
+    };
+
+    private BarAction newBarAction = new()
+    {
+        Title = string.Empty,
+        Details = string.Empty,
+        StartsAt = DateTime.Now,
+        EndsAt = DateTime.Now.AddHours(2),
+        IsActive = true
+    };
+
+    private IBrowserFile? selectedFile;
+    private string? adError;
+
+    protected override void OnInitialized()
+    {
+        ReloadData();
+    }
+
+    private void ReloadData()
+    {
+        advertisements = uow.DisplayRepo.GetAdvertisements();
+        menuItems = uow.DisplayRepo.GetMenuItems();
+        barActions = uow.DisplayRepo.GetBarActions();
+    }
+
+    private void OnFileSelected(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+        adError = null;
+    }
+
+    private async Task AddAdvertisement()
+    {
+        adError = null;
+
+        if (string.IsNullOrWhiteSpace(newAd.Title))
+        {
+            adError = "Bitte einen Titel eingeben.";
+            return;
+        }
+
+        if (selectedFile is null)
+        {
+            adError = "Bitte zuerst ein Bild auswaehlen.";
+            return;
+        }
+
+        if (selectedFile.Size > 10 * 1024 * 1024)
+        {
+            adError = "Datei ist zu gross (max. 10 MB).";
+            return;
+        }
+
+        var extension = Path.GetExtension(selectedFile.Name).ToLowerInvariant();
+        if (extension != ".jpg" && extension != ".jpeg" && extension != ".png" && extension != ".webp")
+        {
+            adError = "Nur JPG, PNG und WEBP sind erlaubt.";
+            return;
+        }
+
+        var adsFolder = Path.Combine(Env.WebRootPath, "images", "ads");
+        Directory.CreateDirectory(adsFolder);
+
+        var fileName = $"{Guid.NewGuid()}{extension}";
+        var targetPath = Path.Combine(adsFolder, fileName);
+
+        await using (var stream = selectedFile.OpenReadStream(10 * 1024 * 1024))
+        await using (var fileStream = File.Create(targetPath))
+        {
+            await stream.CopyToAsync(fileStream);
+        }
+
+        newAd.ImagePath = $"/images/ads/{fileName}";
+        uow.DisplayRepo.AddAdvertisement(newAd);
+
+        newAd = new Advertisement
+        {
+            Title = string.Empty,
+            ImagePath = string.Empty,
+            DurationSeconds = 12,
+            IsActive = true
+        };
+
+        selectedFile = null;
+        ReloadData();
+    }
+
+    private void SaveAdvertisement(Advertisement ad)
+    {
+        ad.DurationSeconds = Math.Clamp(ad.DurationSeconds, 3, 300);
+        uow.DisplayRepo.UpdateAdvertisement(ad);
+        ReloadData();
+    }
+
+    private void DeleteAdvertisement(Advertisement ad)
+    {
+        var physicalPath = ad.ImagePath.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar);
+        var fullPath = Path.Combine(Env.WebRootPath, physicalPath);
+
+        if (File.Exists(fullPath))
+        {
+            File.Delete(fullPath);
+        }
+
+        uow.DisplayRepo.DeleteAdvertisement(ad.AdID);
+        ReloadData();
+    }
+
+    private void AddMenuItem()
+    {
+        if (string.IsNullOrWhiteSpace(newMenuItem.Title))
+        {
+            return;
+        }
+
+        uow.DisplayRepo.AddMenuItem(newMenuItem);
+        newMenuItem = new BarMenuItem
+        {
+            Title = string.Empty,
+            Description = string.Empty,
+            IsActive = true
+        };
+        ReloadData();
+    }
+
+    private void SaveMenuItem(BarMenuItem menuItem)
+    {
+        uow.DisplayRepo.UpdateMenuItem(menuItem);
+        ReloadData();
+    }
+
+    private void DeleteMenuItem(int menuItemId)
+    {
+        uow.DisplayRepo.DeleteMenuItem(menuItemId);
+        ReloadData();
+    }
+
+    private void AddBarAction()
+    {
+        if (string.IsNullOrWhiteSpace(newBarAction.Title) || newBarAction.EndsAt <= newBarAction.StartsAt)
+        {
+            return;
+        }
+
+        uow.DisplayRepo.AddBarAction(newBarAction);
+        newBarAction = new BarAction
+        {
+            Title = string.Empty,
+            Details = string.Empty,
+            StartsAt = DateTime.Now,
+            EndsAt = DateTime.Now.AddHours(2),
+            IsActive = true
+        };
+        ReloadData();
+    }
+
+    private void SaveBarAction(BarAction barAction)
+    {
+        if (barAction.EndsAt <= barAction.StartsAt)
+        {
+            return;
+        }
+
+        uow.DisplayRepo.UpdateBarAction(barAction);
+        ReloadData();
+    }
+
+    private void DeleteBarAction(int actionId)
+    {
+        uow.DisplayRepo.DeleteBarAction(actionId);
+        ReloadData();
+    }
+}

@@ -1,82 +1,20 @@
 ﻿@page "/"
-@using DB_Models.DTO
-@using Microsoft.AspNetCore.Components.Forms
-@using System.Runtime.InteropServices
-@inject BLDAL.UnitOfWork uow
-@inject NavigationManager NavigationManager;
 @attribute [AllowAnonymous]
 
-<PageTitle>Home</PageTitle>
-<div class="full-background">
+<PageTitle>Köö Bludenz</PageTitle>
 
-<div class="hero-section">
-
-    <div class="hero-overlay">
-
-        <h1 class="hero-title">
-            Willkommen im Köö Bludenz
-        </h1>
-
-        <p class="hero-subtitle">
-            Wir veranstalten ein Turnier am xx.xx.xxxx. <br/>
-            Jetzt anmelden!
+<section class="landing-shell">
+    <div class="landing-card">
+        <p class="kicker">Billiard Club</p>
+        <h1>Willkommen im Köö Bludenz</h1>
+        <p class="lead">
+            Bar, Turniere und Vereinsleben an einem Ort. Melde dich fuer das naechste Turnier an
+            oder logge dich ein, um deine Inhalte zu verwalten.
         </p>
 
-        <EditForm Model="@anmeldungVM" OnValidSubmit="HandleSubmit" FormName="MatchForm">
-            <DataAnnotationsValidator />
-
-            <div class="form-group">
-                <label for="name">Name</label>
-                <InputText id="name" class="form-control" @bind-Value="anmeldungVM.Name" />
-                <ValidationMessage For="() => anmeldungVM.Name" />
-            </div>
-
-            <div class="form-group">
-                <label for="email">E-Mail</label>
-                <InputText id="email" class="form-control" @bind-Value="anmeldungVM.Email" />
-                <ValidationMessage For="() => anmeldungVM.Email" />
-            </div>
-
-            <div class="form-group">
-                <label for="phone">Telefon</label>
-                <InputText id="phone" class="form-control" @bind-Value="anmeldungVM.PhoneNumber" />
-                <ValidationMessage For="() => anmeldungVM.PhoneNumber" />
-            </div>
-
-            <button type="submit" class="form-button">
-                Jetzt anmelden
-            </button>
-        </EditForm>
+        <div class="cta-row">
+            <a class="btn-primary-solid" href="/turnier-anmeldung">Turnier Registrierung</a>
+            <a class="btn-secondary-ghost" href="/login">Login</a>
+        </div>
     </div>
-</div>
-
-</div>
-
-@code {
-    [SupplyParameterFromForm]
-    private TRegisterDTO anmeldungVM { get; set; } = new TRegisterDTO();
-
-private async Task HandleSubmit()
-{
-    try
-    {
-        var success = await uow.TRegisterRepo.RegisterMemberAsync(anmeldungVM);
-
-        if (success)
-        {
-            Console.WriteLine("Anmeldung erfolgreich!");
-            
-        }
-        else       
-         Console.WriteLine("Anmeldung fehlgeschlagen.");
-
-
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine(ex.Message);
-    }
-    NavigationManager.NavigateTo("/thanks");
-}
-
-}
+</section>
