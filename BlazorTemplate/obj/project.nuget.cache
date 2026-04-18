@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "dhCWULjozB8=",
+  "dgSpecHash": "9vZ/RgtsaLs=",
   "success": true,
   "projectFilePath": "/home/admin/Dokumente/köö/LAP_Templates/BlazorTemplate/BlazorTemplate.csproj",
   "expectedPackageFiles": [
@@ -126,7 +126,9 @@
     "/home/admin/.nuget/packages/system.resources.extensions/9.0.0/system.resources.extensions.9.0.0.nupkg.sha512",
     "/home/admin/.nuget/packages/system.security.cryptography.pkcs/9.0.0/system.security.cryptography.pkcs.9.0.0.nupkg.sha512",
     "/home/admin/.nuget/packages/system.security.cryptography.protecteddata/9.0.6/system.security.cryptography.protecteddata.9.0.6.nupkg.sha512",
-    "/home/admin/.nuget/packages/telegram.bot/22.9.5.2/telegram.bot.22.9.5.2.nupkg.sha512"
+    "/home/admin/.nuget/packages/telegram.bot/22.9.5.2/telegram.bot.22.9.5.2.nupkg.sha512",
+    "/home/admin/.nuget/packages/microsoft.netcore.app.runtime.linux-arm64/10.0.6/microsoft.netcore.app.runtime.linux-arm64.10.0.6.nupkg.sha512",
+    "/home/admin/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-arm64/10.0.6/microsoft.aspnetcore.app.runtime.linux-arm64.10.0.6.nupkg.sha512"
   ],
   "logs": [
     {
@@ -138,7 +140,8 @@
       "filePath": "/home/admin/Dokumente/köö/LAP_Templates/BlazorTemplate/BlazorTemplate.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Common",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -150,7 +153,8 @@
       "filePath": "/home/admin/Dokumente/köö/LAP_Templates/BlazorTemplate/BlazorTemplate.csproj",
       "libraryId": "Microsoft.CodeAnalysis.CSharp",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -162,7 +166,8 @@
       "filePath": "/home/admin/Dokumente/köö/LAP_Templates/BlazorTemplate/BlazorTemplate.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Workspaces.Common",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -174,7 +179,8 @@
       "filePath": "/home/admin/Dokumente/köö/LAP_Templates/BlazorTemplate/BlazorTemplate.csproj",
       "libraryId": "Microsoft.CodeAnalysis.CSharp.Workspaces",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -186,7 +192,8 @@
       "filePath": "/home/admin/Dokumente/köö/LAP_Templates/BlazorTemplate/BlazorTemplate.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Common",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -198,7 +205,8 @@
       "filePath": "/home/admin/Dokumente/köö/LAP_Templates/BlazorTemplate/BlazorTemplate.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Workspaces.Common",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -210,7 +218,8 @@
       "filePath": "/home/admin/Dokumente/köö/LAP_Templates/BlazorTemplate/BlazorTemplate.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Common",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -222,7 +231,8 @@
       "filePath": "/home/admin/Dokumente/köö/LAP_Templates/BlazorTemplate/BlazorTemplate.csproj",
       "libraryId": "NuGet.Packaging",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     },
     {
@@ -234,7 +244,8 @@
       "filePath": "/home/admin/Dokumente/köö/LAP_Templates/BlazorTemplate/BlazorTemplate.csproj",
       "libraryId": "NuGet.Protocol",
       "targetGraphs": [
-        "net10.0"
+        "net10.0",
+        "net10.0/linux-arm64"
       ]
     }
   ]

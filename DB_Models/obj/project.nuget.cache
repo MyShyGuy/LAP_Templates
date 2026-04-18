@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "/49PgUZmGE0=",
+  "dgSpecHash": "U5bJoWIkGGE=",
   "success": true,
   "projectFilePath": "/home/admin/Dokumente/köö/LAP_Templates/DB_Models/DB_Models.csproj",
   "expectedPackageFiles": [
@@ -14,7 +14,9 @@
     "/home/admin/.nuget/packages/microsoft.extensions.logging/10.0.6/microsoft.extensions.logging.10.0.6.nupkg.sha512",
     "/home/admin/.nuget/packages/microsoft.extensions.logging.abstractions/10.0.6/microsoft.extensions.logging.abstractions.10.0.6.nupkg.sha512",
     "/home/admin/.nuget/packages/microsoft.extensions.options/10.0.6/microsoft.extensions.options.10.0.6.nupkg.sha512",
-    "/home/admin/.nuget/packages/microsoft.extensions.primitives/10.0.6/microsoft.extensions.primitives.10.0.6.nupkg.sha512"
+    "/home/admin/.nuget/packages/microsoft.extensions.primitives/10.0.6/microsoft.extensions.primitives.10.0.6.nupkg.sha512",
+    "/home/admin/.nuget/packages/microsoft.netcore.app.runtime.linux-arm64/10.0.6/microsoft.netcore.app.runtime.linux-arm64.10.0.6.nupkg.sha512",
+    "/home/admin/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-arm64/10.0.6/microsoft.aspnetcore.app.runtime.linux-arm64.10.0.6.nupkg.sha512"
   ],
   "logs": []
 }

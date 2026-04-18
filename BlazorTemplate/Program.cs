@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("http://0.0.0.0:5130");
 
 var dbDirectory = Path.Combine(builder.Environment.ContentRootPath, "data");
 Directory.CreateDirectory(dbDirectory);
@@ -65,6 +66,7 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<BLDAL.UnitOfWork>();
 
 var app = builder.Build();
+app.Logger.LogInformation("Binding web server to {BindAddress}", "http://0.0.0.0:5130");
 
 await SeedAdminUserAsync(app.Services);
 

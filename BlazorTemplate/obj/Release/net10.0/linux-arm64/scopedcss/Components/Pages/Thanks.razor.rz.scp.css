@@ -2,8 +2,8 @@
    Full Background Layout
 ================================ */
 
-.full-background[b-1i8ye0nxi2],
-.hero-section[b-1i8ye0nxi2] {
+.full-background[b-a8btr6qa70],
+.hero-section[b-a8btr6qa70] {
     min-height: 100vh;
     width: 100%;
 
@@ -17,11 +17,11 @@
 }
 
 /* Hintergrundbilder getrennt lassen */
-.full-background[b-1i8ye0nxi2] {
+.full-background[b-a8btr6qa70] {
     background-image: url("/images/Backround.jpg");
 }
 
-.hero-section[b-1i8ye0nxi2] {
+.hero-section[b-a8btr6qa70] {
     background-image: url("/images/background.jpg");
 }
 
@@ -29,7 +29,7 @@
    Overlay Box (Glassmorphism Style)
 ================================ */
 
-.hero-overlay[b-1i8ye0nxi2] {
+.hero-overlay[b-a8btr6qa70] {
     background: rgba(0, 0, 0, 0.65);
     backdrop-filter: blur(10px);
 
@@ -50,13 +50,13 @@
    Typography
 ================================ */
 
-.hero-title[b-1i8ye0nxi2] {
+.hero-title[b-a8btr6qa70] {
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 700;
     margin-bottom: 12px;
 }
 
-.hero-subtitle[b-1i8ye0nxi2] {
+.hero-subtitle[b-a8btr6qa70] {
     font-size: 1.1rem;
     opacity: 0.85;
     margin-bottom: 30px;
@@ -66,20 +66,20 @@
    Form Styles
 ================================ */
 
-.form-group[b-1i8ye0nxi2] {
+.form-group[b-a8btr6qa70] {
     margin-bottom: 18px;
     text-align: center;
 }
 
 /* Labels */
-.form-group label[b-1i8ye0nxi2] {
+.form-group label[b-a8btr6qa70] {
     font-weight: 600;
     margin-bottom: 6px;
     display: block;
 }
 
 /* Inputs */
-.form-group input[b-1i8ye0nxi2] {
+.form-group input[b-a8btr6qa70] {
     width: 100%;
     max-width: 420px;
 
@@ -99,12 +99,12 @@
 }
 
 /* Placeholder */
-.form-group input[b-1i8ye0nxi2]::placeholder {
+.form-group input[b-a8btr6qa70]::placeholder {
     color: rgba(255, 255, 255, 0.6);
 }
 
 /* Focus State */
-.form-group input:focus[b-1i8ye0nxi2] {
+.form-group input:focus[b-a8btr6qa70] {
     outline: none;
 
     border-color: #0d6efd;
@@ -117,7 +117,7 @@
    Button
 ================================ */
 
-.form-button[b-1i8ye0nxi2] {
+.form-button[b-a8btr6qa70] {
     width: 100%;
     max-width: 420px;
 
@@ -138,11 +138,11 @@
     transition: all 0.25s ease;
 }
 
-.form-button:hover[b-1i8ye0nxi2] {
+.form-button:hover[b-a8btr6qa70] {
     background: #084298;
     transform: translateY(-2px);
 }
 
-.form-button:active[b-1i8ye0nxi2] {
+.form-button:active[b-a8btr6qa70] {
     transform: translateY(0);
 }

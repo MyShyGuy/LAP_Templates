@@ -57,3 +57,5 @@ info: Microsoft.Hosting.Lifetime[0]
       Hosting environment: Production
 info: Microsoft.Hosting.Lifetime[0]
       Content root path: /home/admin/Dokumente/köö/LAP_Templates/BlazorTemplate
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
