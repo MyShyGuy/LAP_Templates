@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Authorization
 @inject BLDAL.UnitOfWork uow
 @inject IWebHostEnvironment Env
+@inject IConfiguration Configuration
 @attribute [Authorize(Roles = "Admin")]
 
 <PageTitle>Display Admin</PageTitle>
@@ -122,7 +123,7 @@
             return;
         }
 
-        var adsFolder = Path.Combine(Env.WebRootPath, "images", "ads");
+        var adsFolder = GetAdsStorageFolder();
         Directory.CreateDirectory(adsFolder);
 
         var fileName = $"{Guid.NewGuid()}{extension}";
@@ -134,7 +135,7 @@
             await stream.CopyToAsync(fileStream);
         }
 
-        newAd.ImagePath = $"/images/ads/{fileName}";
+        newAd.ImagePath = $"/uploads/ads/{fileName}";
         uow.DisplayRepo.AddAdvertisement(newAd);
 
         newAd = new Advertisement
@@ -158,15 +159,38 @@
 
     private void DeleteAdvertisement(Advertisement ad)
     {
-        var physicalPath = ad.ImagePath.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar);
-        var fullPath = Path.Combine(Env.WebRootPath, physicalPath);
+        var fullPath = ResolveImagePhysicalPath(ad.ImagePath);
 
-        if (File.Exists(fullPath))
+        if (!string.IsNullOrWhiteSpace(fullPath) && File.Exists(fullPath))
         {
             File.Delete(fullPath);
         }
 
         uow.DisplayRepo.DeleteAdvertisement(ad.AdID);
         ReloadData();
+    }
+
+    private string GetAdsStorageFolder()
+    {
+        var configuredRoot = Configuration["FileStorage:AdsRoot"];
+        return string.IsNullOrWhiteSpace(configuredRoot)
+            ? Path.GetFullPath(Path.Combine(Env.ContentRootPath, "..", "data", "uploads", "ads"))
+            : configuredRoot;
+    }
+
+    private string ResolveImagePhysicalPath(string? imagePath)
+    {
+        if (string.IsNullOrWhiteSpace(imagePath))
+        {
+            return string.Empty;
+        }
+
+        if (imagePath.StartsWith("/uploads/ads/", StringComparison.OrdinalIgnoreCase))
+        {
+            return Path.Combine(GetAdsStorageFolder(), Path.GetFileName(imagePath));
+        }
+
+        var physicalPath = imagePath.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar);
+        return Path.Combine(Env.WebRootPath, physicalPath);
     }
 }

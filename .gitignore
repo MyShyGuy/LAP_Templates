@@ -1,17 +1,31 @@
-# Visual Studio Ordner
+# IDE and OS files
 .vs/
+.vscode/
+*.user
+*.suo
+*.swp
+*.DS_Store
 
-# BlazorTemplate Build-Ordner
-BlazorTemplate/bin/
-BlazorTemplate/obj/Debug/
-BlazorTemplate/appsettings.json
+# Build outputs
+**/bin/
+**/obj/
+**/Debug/
+**/Release/
 
-# BLDAL Build-Ordner und Migrationen
-BLDAL/bin/
-BLDAL/obj/Debug/
+# Logs
+*.log
 
-# DB_Models Build-Ordner
-DB_Models/bin/
-DB_Models/obj/Debug/
+# Local app data and uploaded runtime content
+BlazorTemplate/data/
+BlazorTemplate/wwwroot/images/ads/
+*.db
+*.db-shm
+*.db-wal
 
+# Generated publish output
+_deploy/BlazorTemplate/linux-arm64-stable/
+
+# Local config and temporary artifacts
+BlazorTemplate/appsettings.Development.json
+BlazorTemplate/build_log.txt
 test.csv

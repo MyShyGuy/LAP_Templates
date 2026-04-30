@@ -4,6 +4,7 @@ using BLDAL;
 using DB_Models.Models;
 using DB_Models.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,12 @@ var connectionString = string.IsNullOrWhiteSpace(configuredConnectionString) ||
                        configuredConnectionString.Contains(":memory:", StringComparison.OrdinalIgnoreCase)
     ? $"Data Source={defaultDbPath}"
     : configuredConnectionString;
+
+var configuredAdsRoot = builder.Configuration["FileStorage:AdsRoot"];
+var adsStorageRoot = string.IsNullOrWhiteSpace(configuredAdsRoot)
+    ? Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "..", "data", "uploads", "ads"))
+    : configuredAdsRoot;
+Directory.CreateDirectory(adsStorageRoot);
 
 builder.Services.AddLogging(logging =>
 {
@@ -81,6 +88,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(adsStorageRoot),
+    RequestPath = "/uploads/ads"
+});
 
 app.UseAntiforgery();
 

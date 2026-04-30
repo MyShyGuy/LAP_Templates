@@ -1,0 +1,20 @@
+[Unit]
+Description=BlazorTemplate Web App
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=admin
+Group=www-data
+WorkingDirectory=/var/www/blazortemplate/app
+ExecStart=/var/www/blazortemplate/app/BlazorTemplate
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://0.0.0.0:5130
+Restart=on-failure
+RestartSec=5
+KillSignal=SIGINT
+SyslogIdentifier=blazortemplate
+
+[Install]
+WantedBy=multi-user.target
